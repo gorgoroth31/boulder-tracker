@@ -27,3 +27,5 @@
 8. (Backend) API-Endpunkt und Business-Logic für die Bearbeitung von Daten erstellen
 9. (Frontend) Bearbeiten einer einzelnen Session
 10. (Frontend) schickere Darstellung der einzelnen Sessions mit eigenen Diagrammen 
+- wenn das hier erreicht ist, ist Version 1.0 draußen. Kann dann zwar nur eine einzelne Person verwenden, aber es soll funktionieren
+11. Hinzufügen von Profilen --> da müssen die einzelnen Schritte noch eroiert werden
