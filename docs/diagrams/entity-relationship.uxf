@@ -1,4 +1,4 @@
-<diagram program="umletino" version="15.1"><zoom_level>11</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>440</x><y>308</y><w>264</w><h>176</h></coordinates><panel_attributes>Session
+<diagram program="umletino" version="15.1"><zoom_level>11</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>473</x><y>231</y><w>264</w><h>176</h></coordinates><panel_attributes>Session
 
 -
 id : UUID
@@ -6,30 +6,37 @@ date: DateTime
 startTime : DateTime
 endTime: DateTime
 routesSolved: BoulderRoute[]
-boulderedSolo: boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>209</x><y>594</y><w>154</w><h>132</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+boulderedSolo: boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>242</x><y>517</y><w>154</w><h>132</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
 Difficulty
 -
-YELLOW, GREEN, 
-ORANGE, WHITE, 
-BLUE, RED, BLACK
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>462</x><y>583</y><w>231</w><h>143</h></coordinates><panel_attributes>BoulderRoute
+GELB, GRÜN, 
+ORANGE, WEIß, 
+BLAU, ROT, SCHWARZ
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>495</x><y>506</y><w>231</w><h>187</h></coordinates><panel_attributes>BoulderRoute
 -
 screwedDifficulty: Difficulty
 feltLikeDifficulty: Difficulty
 attempts: int
 sessionsTried: int
-style: Style[]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>858</x><y>583</y><w>242</w><h>143</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+style: Style[]
+like: Like
+exhausted: boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>891</x><y>506</y><w>242</w><h>143</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
 Style
 -
-SLAB, OVERHANG, ROOF, 
-CRIMPY, SLOPEY, LONG, 
-SHORT, STATIC, DYNAMIC, 
-STRETCHY, TIGHT, EDGE, DRAINING, 
-STRAIGHT_UP, AROUND_CORNERS
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>682</x><y>638</y><w>198</w><h>44</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
-1..*</panel_attributes><additional_attributes>10;20;160;20</additional_attributes></element><element><id>Relation</id><coordinates><x>352</x><y>638</y><w>132</w><h>44</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;100;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>418</x><y>77</y><w>297</w><h>110</h></coordinates><panel_attributes>Profile (not yet to implement)
+SLAB, ÜBERHANG, DACH, 
+CRIMPY, SLOPEY, LANG, 
+KURZ, STATISCH, DYNAMISCH, 
+STRETCHY, KANTE, KRAFTIG, 
+EINFACH_HOCH, UM_ECKE
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>715</x><y>561</y><w>198</w><h>44</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+1..*</panel_attributes><additional_attributes>10;20;160;20</additional_attributes></element><element><id>Relation</id><coordinates><x>385</x><y>561</y><w>132</w><h>44</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;100;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>451</x><y>0</y><w>297</w><h>110</h></coordinates><panel_attributes>Profile (not yet to implement)
 -
 id: UUID
 personalData: PersonalData
-sessions: (via mapping table (profileID, sessionID)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>561</x><y>473</y><w>55</w><h>132</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
-0..*</panel_attributes><additional_attributes>10;10;10;100</additional_attributes></element></diagram>
+sessions: (via mapping table (profileID, sessionID)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>594</x><y>396</y><w>55</w><h>132</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+0..*</panel_attributes><additional_attributes>10;10;10;100</additional_attributes></element><element><id>UMLClass</id><coordinates><x>495</x><y>759</y><w>231</w><h>99</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+Like
+-
+LIKE, DISLIKE, 
+KINDA_LIKE, KINDA_DISLIKE</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>605</x><y>682</y><w>44</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+1</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element></diagram>
