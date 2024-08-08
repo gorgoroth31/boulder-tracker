@@ -18,12 +18,12 @@
 
 # Schritte
 1. Entity-Model erschaffen. Was soll wie in welcher Relation zu was abgespeichert werden?
-2. (Backend) Datenmodell mit structs aufbauen. Erstellen und auslesen von Testdaten in Memory
-3. (Backend, CSV) Testdaten in Memory in CSV abspeichern und von CSV auslesen
-4. (Backend) API-Endpoints erstellen um über z.B. Postman Daten abzuspeichern und auszulesen (nur Create und Read)
-5. (Frontend) Einfache Frontend Menüführung erstellen (seitliche Navbar (eingeklappt Icons sichtbar, ausgeklappt auch Text), für Handy unten; Dashboard, Hinzufügen, Sessions)
-6. (Frontend) Einfaches Frontend, das es erlaubt, Daten abzuspeichern (Hinzufügen-Reiter; Wizard-Style?) und alle Daten auf einmal auszulesen (Session-Reiter; einfache Darstellung reicht)
-7. (Frontend) Mit vorhandenen Daten ein Dashboard mit Apex Charts erstellen, in dem mehrere Diagramme drin sind
+2. (Backend) Datenmodell mit structs aufbauen. Erstellen und auslesen von Testdaten in Memory 
+3. (Backend) API-Endpoints erstellen um über z.B. Postman Daten abzuspeichern und auszulesen (nur Create und Read)
+4. (Frontend) Einfache Frontend Menüführung erstellen (seitliche Navbar (eingeklappt Icons sichtbar, ausgeklappt auch Text), für Handy unten; Dashboard, Hinzufügen, Sessions)
+5. (Frontend) Einfaches Frontend, das es erlaubt, Daten abzuspeichern (Hinzufügen-Reiter; Wizard-Style?) und alle Daten auf einmal auszulesen (Session-Reiter; einfache Darstellung reicht)
+6. (Frontend) Mit vorhandenen Daten ein Dashboard mit Apex Charts erstellen, in dem mehrere Diagramme drin sind
+7. (Backend, CSV) Testdaten in Memory in CSV abspeichern und von CSV auslesen
 8. (Backend) API-Endpunkt und Business-Logic für die Bearbeitung von Daten erstellen
 9. (Frontend) Bearbeiten einer einzelnen Session
 10. (Frontend) schickere Darstellung der einzelnen Sessions mit eigenen Diagrammen 
