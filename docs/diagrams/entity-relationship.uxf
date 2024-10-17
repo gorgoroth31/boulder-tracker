@@ -19,7 +19,7 @@ feltLikeDifficulty: Difficulty
 attempts: int
 sessionsTried: int
 style: Style[]
-like: boolean
+like: Like
 exhausted: boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>891</x><y>506</y><w>242</w><h>143</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
 Style
 -

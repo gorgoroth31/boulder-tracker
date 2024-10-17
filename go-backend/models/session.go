@@ -12,10 +12,11 @@ type Session struct {
 	startTime     Time
 	endTime       Time
 	boulderedSolo bool
+	routesSolved  []Boulder
 }
 
-func NewSession(id uuid.UUID, date Date, startTime Time, endTime Time, boulderedSolo bool) *Session {
-	return &Session{id: id, date: date, startTime: startTime, endTime: endTime, boulderedSolo: boulderedSolo}
+func NewSession(id uuid.UUID, date Date, startTime Time, endTime Time, boulderedSolo bool, routesSolved []Boulder) *Session {
+	return &Session{id: id, date: date, startTime: startTime, endTime: endTime, boulderedSolo: boulderedSolo, routesSolved: routesSolved}
 }
 
 func (session *Session) Print() {
@@ -25,6 +26,7 @@ func (session *Session) Print() {
 	fmt.Println(session.endTime)
 	fmt.Println(session.DurationInMin())
 	fmt.Println(session.boulderedSolo)
+	fmt.Println(session.routesSolved)
 
 }
 
