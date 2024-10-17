@@ -1,7 +1,6 @@
 package models
 
 import (
-	"github.com/gorgoroth31/boulder-tracker/go-backend/enums/like"
 	"github.com/gorgoroth31/boulder-tracker/go-backend/enums/style"
 )
 
@@ -12,14 +11,14 @@ type Boulder struct {
 	sessionsTried      int
 	exhausting         bool
 	style              []style.Style
-	like               like.LikeType
+	like               bool
 }
 
 func NewBoulder(screwedDifficulty Difficulty,
 	feltLikeDifficulty Difficulty,
 	attempts int, sessionsTried int,
 	exhausting bool, style []style.Style,
-	like like.LikeType) *Boulder {
+	like bool) *Boulder {
 	return &Boulder{screwedDifficulty: screwedDifficulty,
 		feltLikeDifficulty: feltLikeDifficulty,
 		attempts:           attempts, sessionsTried: sessionsTried,

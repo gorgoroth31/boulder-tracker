@@ -19,7 +19,7 @@ feltLikeDifficulty: Difficulty
 attempts: int
 sessionsTried: int
 style: Style[]
-like: Like
+like: boolean
 exhausted: boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>891</x><y>506</y><w>242</w><h>143</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
 Style
 -
@@ -34,9 +34,4 @@ EINFACH_HOCH, UM_ECKE
 id: UUID
 personalData: PersonalData
 sessions: (via mapping table (profileID, sessionID)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>594</x><y>396</y><w>55</w><h>132</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
-0..*</panel_attributes><additional_attributes>10;10;10;100</additional_attributes></element><element><id>UMLClass</id><coordinates><x>495</x><y>759</y><w>231</w><h>99</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
-Like
--
-LIKE, DISLIKE, 
-KINDA_LIKE, KINDA_DISLIKE</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>605</x><y>682</y><w>44</w><h>99</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
-1</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element></diagram>
+0..*</panel_attributes><additional_attributes>10;10;10;100</additional_attributes></element></diagram>
