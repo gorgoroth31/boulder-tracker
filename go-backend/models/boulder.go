@@ -12,6 +12,7 @@ type Boulder struct {
 	exhausting         bool
 	style              []style.Style
 	like               bool
+	SessionID          uint
 }
 
 func NewBoudler(screwedDifficulty Difficulty,

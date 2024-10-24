@@ -1,10 +1,16 @@
 package models
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/google/uuid"
+)
 
 type Time struct {
-	hour   int
-	minute int
+	Id        uuid.UUID
+	hour      int
+	minute    int
+	SessionId uint
 }
 
 func NewTime(hour int, minute int) (*Time, error) {

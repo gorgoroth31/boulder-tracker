@@ -1,16 +1,18 @@
 package models
 
-import "strconv"
+import (
+	"strconv"
+)
 
 type Difficulty struct {
-	id    int
+	Id    int
 	alias string
 }
 
 func NewDifficulty(id int, alias string) *Difficulty {
-	return &Difficulty{id: id, alias: alias}
+	return &Difficulty{Id: id, alias: alias}
 }
 
 func NewDifficultyWithoutAlias(id int) *Difficulty {
-	return &Difficulty{id: id, alias: strconv.Itoa(id)}
+	return &Difficulty{Id: id, alias: strconv.Itoa(id)}
 }

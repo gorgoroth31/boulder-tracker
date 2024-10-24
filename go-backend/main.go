@@ -1,23 +1,24 @@
 package main
 
 import (
-	"github.com/google/uuid"
-	"github.com/gorgoroth31/boulder-tracker/go-backend/enums/style"
-	"github.com/gorgoroth31/boulder-tracker/go-backend/models"
+	"github.com/gorgoroth31/boulder-tracker/go-backend/repository"
 )
 
 func main() {
-	date := models.NewDate(22, 7, 2024)
-	time, _ := models.NewTime(16, 15)
-	time2, _ := models.NewTime(18, 15)
 
-	difficulties := []models.Difficulty{*models.NewDifficulty(0, "yellow"), *models.NewDifficulty(1, "green"), *models.NewDifficulty(2, "orange"), *models.NewDifficulty(3, "white"), *models.NewDifficulty(4, "blue"), *models.NewDifficulty(5, "red"), *models.NewDifficulty(6, "black")}
+	repository.OpenConnection()
 
-	route1 := models.NewBoudler(difficulties[2], difficulties[2], 1, 1, false, []style.Style{style.Slab, style.Statisch}, true)
+	// date := models.NewDate(22, 7, 2024)
+	// time, _ := models.NewTime(16, 15)
+	// time2, _ := models.NewTime(18, 15)
 
-	routes := []models.Boulder{*route1}
+	// difficulties := []models.Difficulty{*models.NewDifficulty(0, "yellow"), *models.NewDifficulty(1, "green"), *models.NewDifficulty(2, "orange"), *models.NewDifficulty(3, "white"), *models.NewDifficulty(4, "blue"), *models.NewDifficulty(5, "red"), *models.NewDifficulty(6, "black")}
 
-	session := models.NewSession(uuid.New(), *date, *time, *time2, false, routes)
+	// route1 := models.NewBoudler(difficulties[2], difficulties[2], 1, 1, false, []style.Style{style.Slab, style.Statisch}, true)
 
-	session.Print()
+	// routes := []models.Boulder{*route1}
+
+	// session := models.NewSession(uuid.New(), *date, *time, *time2, false, routes)
+
+	// fmt.Println(*sessions)
 }
