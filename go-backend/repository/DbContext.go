@@ -52,6 +52,6 @@ func OpenDbConnection(ctx context.Context, db *sql.DB) {
 	defer cancel()
 
 	if err := db.PingContext(ctx); err != nil {
-		log.Fatal("Unable to connect to database: %v", err)
+		log.Fatal(err)
 	}
 }
