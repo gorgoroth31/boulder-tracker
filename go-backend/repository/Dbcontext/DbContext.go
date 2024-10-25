@@ -9,7 +9,6 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	style "github.com/gorgoroth31/boulder-tracker/go-backend/repository/Style"
 )
 
 var DB *sql.DB
@@ -51,7 +50,6 @@ func OpenConnection() {
 
 	DB = db
 
-	style.Add("newStyle")
 }
 
 func OpenDbConnection(ctx context.Context, db *sql.DB) {

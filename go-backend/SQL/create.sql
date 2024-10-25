@@ -17,7 +17,7 @@ create table boulder(
     exhausting boolean,
     SessionId char(36),
     PRIMARY KEY (Id),
-    FOREIGN KEY (SessionId) REFERENCES session(Id),
+    FOREIGN KEY (SessionId) REFERENCES session(Id)
 );
 
 create table difficulty (
@@ -27,6 +27,7 @@ create table difficulty (
 );
 
 create table style(
+    Id char(36),
     alias varchar(255),
     PRIMARY KEY (Id)
 );
@@ -53,4 +54,4 @@ create table boulder_actual_difficulty(
     PRIMARY KEY (boulderId, difficultyId),
     FOREIGN Key (boulderId) REFERENCES boulder(Id),
     FOREIGN Key (difficultyId) REFERENCES difficulty(Id)
-)
+);

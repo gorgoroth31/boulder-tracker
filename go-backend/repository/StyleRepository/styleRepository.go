@@ -1,11 +1,11 @@
-package style
+package styleRepository
 
 import (
 	"database/sql"
 	"fmt"
 	"log"
 
-	"github.com/gorgoroth31/boulder-tracker/go-backend/repository/Dbcontext"
+	Dbcontext "github.com/gorgoroth31/boulder-tracker/go-backend/repository/DbContext"
 )
 
 func Add(style string) error {
@@ -33,5 +33,4 @@ func Add(style string) error {
 	}
 
 	return nil
-
 }

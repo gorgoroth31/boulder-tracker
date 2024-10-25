@@ -1,10 +1,15 @@
 package main
 
-import Dbcontext "github.com/gorgoroth31/boulder-tracker/go-backend/repository/DbContext"
+import (
+	Dbcontext "github.com/gorgoroth31/boulder-tracker/go-backend/repository/DbContext"
+	styleservice "github.com/gorgoroth31/boulder-tracker/go-backend/services/StyleService"
+)
 
 func main() {
 
 	Dbcontext.OpenConnection()
+
+	styleservice.Add("newStyle")
 
 	// date := models.NewDate(22, 7, 2024)
 	// time, _ := models.NewTime(16, 15)
