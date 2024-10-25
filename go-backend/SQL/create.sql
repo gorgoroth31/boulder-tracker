@@ -1,13 +1,12 @@
-use bouldertracker;
-
 create table session(
     Id varchar(255),
     Date date,
     StartTime date,
     EndTime date,
     BoulderedSolo boolean,
-    PRIMARY KEY (Id),
+    PRIMARY KEY (Id)
 );
+
 
 create table boulder(
     Id varchar(255),
@@ -16,7 +15,6 @@ create table boulder(
     attempts int,
     sessionsTried int,
     exhausting boolean,
-    style int,
     SessionId varchar(255),
     PRIMARY KEY (Id),
     FOREIGN KEY (SessionId) REFERENCES session(Id)
@@ -26,4 +24,18 @@ create table difficulty (
     Id int,
     alias varchar(255),
     PRIMARY KEY (Id)
+);
+
+create table style(
+    Id varchar(255),
+    alias varchar(255),
+    PRIMARY KEY (Id)
+);
+
+create table boulder_style(
+    boulderId varchar(255),
+    styleId varchar(255),
+    PRIMARY KEY(boulderId, styleId),
+    FOREIGN KEY (boulderId) REFERENCES boulder(Id),
+    FOREIGN KEY (styleId) REFERENCES style(Id)
 );
