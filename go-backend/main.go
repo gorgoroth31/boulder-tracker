@@ -1,12 +1,10 @@
 package main
 
-import (
-	"github.com/gorgoroth31/boulder-tracker/go-backend/repository"
-)
+import Dbcontext "github.com/gorgoroth31/boulder-tracker/go-backend/repository/DbContext"
 
 func main() {
 
-	repository.OpenConnection()
+	Dbcontext.OpenConnection()
 
 	// date := models.NewDate(22, 7, 2024)
 	// time, _ := models.NewTime(16, 15)

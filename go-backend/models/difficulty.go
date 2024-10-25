@@ -1,18 +1,14 @@
 package models
 
 import (
-	"strconv"
+	"github.com/google/uuid"
 )
 
 type Difficulty struct {
-	Id    int
+	Id    uuid.UUID
 	alias string
 }
 
-func NewDifficulty(id int, alias string) *Difficulty {
+func NewDifficulty(id uuid.UUID, alias string) *Difficulty {
 	return &Difficulty{Id: id, alias: alias}
-}
-
-func NewDifficultyWithoutAlias(id int) *Difficulty {
-	return &Difficulty{Id: id, alias: strconv.Itoa(id)}
 }

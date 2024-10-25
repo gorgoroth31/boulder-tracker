@@ -1,18 +1,14 @@
 package models
 
 import (
-	"strconv"
+	"github.com/google/uuid"
 )
 
 type Style struct {
-	Id    int
+	Id    uuid.UUID
 	Alias string
 }
 
-func NewStyle(id int, alias string) *Style {
+func NewStyle(id uuid.UUID, alias string) *Style {
 	return &Style{Id: id, Alias: alias}
-}
-
-func NewStyleWithoutAlias(id int) *Style {
-	return &Style{Id: id, Alias: strconv.Itoa(id)}
 }
