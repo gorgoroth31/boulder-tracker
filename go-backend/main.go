@@ -14,7 +14,7 @@ func main() {
 
 	// difficulties := []models.Difficulty{*models.NewDifficulty(0, "yellow"), *models.NewDifficulty(1, "green"), *models.NewDifficulty(2, "orange"), *models.NewDifficulty(3, "white"), *models.NewDifficulty(4, "blue"), *models.NewDifficulty(5, "red"), *models.NewDifficulty(6, "black")}
 
-	// route1 := models.NewBoudler(difficulties[2], difficulties[2], 1, 1, false, []style.Style{style.Slab, style.Statisch}, true)
+	//route1 := models.NewBoudler(uuid.New(), difficulties[2], difficulties[2], 1, 1, false, []style.Style{style.Slab, style.Statisch}, true)
 
 	// routes := []models.Boulder{*route1}
 

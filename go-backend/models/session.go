@@ -9,16 +9,14 @@ import (
 
 type Session struct {
 	Id            uuid.UUID
-	Date          Date
-	StartTime     Time
-	EndTime       Time
+	Date          time.Time
+	StartTime     time.Time
+	EndTime       time.Time
 	BoulderedSolo bool
 	RoutesSolved  []Boulder
-	CreatedAt     time.Time
-	UpdatedAt     time.Time
 }
 
-func NewSession(id uuid.UUID, date Date, startTime Time, endTime Time, boulderedSolo bool, routesSolved []Boulder) *Session {
+func NewSession(id uuid.UUID, date time.Time, startTime time.Time, endTime time.Time, boulderedSolo bool, routesSolved []Boulder) *Session {
 	return &Session{Date: date, StartTime: startTime, EndTime: endTime, BoulderedSolo: boulderedSolo, RoutesSolved: routesSolved}
 }
 
@@ -34,8 +32,6 @@ func (session *Session) Print() {
 }
 
 func (session *Session) DurationInMin() int {
-	absoluteEndTime := ((session.EndTime.hour + 1) * 60) + session.EndTime.minute
-	absoluteStartTime := ((session.StartTime.hour + 1) * 60) + session.StartTime.minute
-
-	return absoluteEndTime - absoluteStartTime
+	time := session.EndTime.Sub(session.StartTime)
+	return int(time.Minutes())
 }
