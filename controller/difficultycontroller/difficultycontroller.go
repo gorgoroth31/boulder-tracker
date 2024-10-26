@@ -1,14 +1,24 @@
 package difficultycontroller
 
 import (
-	"fmt"
+	"encoding/json"
+	"log"
 	"net/http"
+
+	"github.com/gorgoroth31/boulder-tracker/models/dto"
 )
 
 func Add(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println(r.Body)
+	decoder := json.NewDecoder(r.Body)
 
+	var t dto.DifficultyDto
+
+	err := decoder.Decode(&t)
+	if err != nil {
+		panic(err)
+	}
+	log.Println(t)
 	// vars := mux.Vars(r)
 	// alias, ok := vars["alias"]
 

@@ -1,11 +1,19 @@
 package sessioncontroller
 
 import (
-	"fmt"
+	"encoding/json"
+	"log"
+	"net/http"
 
-	"github.com/gorgoroth31/boulder-tracker/models"
+	"github.com/gorgoroth31/boulder-tracker/models/dto"
 )
 
-func AddSession(session *models.Session) {
-	fmt.Print(session)
+func Add(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	var t dto.SessionDto
+	err := decoder.Decode(&t)
+	if err != nil {
+		panic(err)
+	}
+	log.Println(t)
 }
