@@ -1,30 +1,42 @@
 package styleRepository
 
+import (
+	"fmt"
+	"log"
+
+	"github.com/google/uuid"
+	"github.com/gorgoroth31/boulder-tracker/db"
+)
+
 func Add(style string) error {
+	database, err := db.CreateDatabase()
 
-	// stmt, err := DB.Prepare("INSERT INTO style (Id, alias) VALUES (@Id, @alias);")
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
 
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// defer stmt.Close()
+	stmt, err := database.Prepare("INSERT INTO style (Id, alias) VALUES (?, ?);")
 
-	// result, err := stmt.Exec(
-	// 	sql.Named("alias", style),
-	// 	sql.Named("Id", uuid.New()),
-	// )
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
 
-	// if err != nil {
-	// 	return err
-	// }
+	result, err := stmt.Exec(uuid.New(), style)
 
-	// rowInserted, err := result.RowsAffected()
+	if err != nil {
+		// i get here something is wrong with exec
+		return err
+	}
 
-	// fmt.Println(rowInserted)
+	rowInserted, err := result.RowsAffected()
 
-	// if err != nil {
-	// 	return err
-	// }
+	fmt.Println(rowInserted)
+
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
