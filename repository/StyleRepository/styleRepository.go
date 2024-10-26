@@ -1,4 +1,4 @@
-package styleRepository
+package StyleRepository
 
 import (
 	"fmt"

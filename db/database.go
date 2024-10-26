@@ -21,5 +21,9 @@ func CreateDatabase() (*sql.DB, error) {
 		return nil, err
 	}
 
+	db.SetConnMaxLifetime(0)
+	db.SetMaxIdleConns(3)
+	db.SetMaxOpenConns(3)
+
 	return db, nil
 }

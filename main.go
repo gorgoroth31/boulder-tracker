@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	styleRepository "github.com/gorgoroth31/boulder-tracker/repository/StyleRepository"
+	"github.com/gorgoroth31/boulder-tracker/services/styleservice"
 	"github.com/gorilla/mux"
 )
 
@@ -20,7 +20,7 @@ func setupRouter(router *mux.Router) {
 }
 
 func addStyle(w http.ResponseWriter, r *http.Request) {
-	err := styleRepository.Add("newStyle")
+	err := styleservice.Add("newStyle")
 	if err != nil {
 		log.Fatal(err)
 	}
