@@ -7,13 +7,9 @@ import (
 	"os"
 	"os/signal"
 	"time"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
-var DB *sql.DB
-
-func OpenConnection() {
+func OpenConnection() *sql.DB {
 	// Context
 	ctx, stop := context.WithCancel(context.Background())
 	defer stop()
@@ -30,7 +26,7 @@ func OpenConnection() {
 	Passwd := os.Getenv("DBPASS")
 	Net := "tcp"
 	Addr := os.Getenv("DBURL")
-	DBName := "BoulderTracker"
+	DBName := "bouldertracker"
 
 	// Use parseTime=true to scan MySQL DATETIME type to Go time.Time
 	dsn := (User + ":" + Passwd + "@" + Net + "(" + Addr + ")/" + DBName + "?charset=utf8mb4&parseTime=True&loc=Local")
@@ -39,7 +35,6 @@ func OpenConnection() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
 
 	db.SetConnMaxLifetime(0)
 	db.SetMaxIdleConns(3)
@@ -48,7 +43,7 @@ func OpenConnection() {
 	// Open connection
 	OpenDbConnection(ctx, db)
 
-	DB = db
+	return db
 
 }
 
