@@ -41,3 +41,34 @@ func Add(entity models.Difficulty) error {
 
 	return nil
 }
+
+func GetAll() (*[]models.Difficulty, error) {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	rows, err := database.Query("SELECT * FROM difficulty;")
+
+	if err != nil {
+		return nil, err
+	}
+
+	var difficultyList []models.Difficulty
+
+	for rows.Next() {
+		var diff models.Difficulty
+		if err := rows.Scan(&diff.Id, &diff.Alias, &diff.RelativeLevel); err != nil {
+			return &difficultyList, err
+		}
+		difficultyList = append(difficultyList, diff)
+	}
+
+	if err = rows.Err(); err != nil {
+		return &difficultyList, err
+	}
+
+	return &difficultyList, nil
+}

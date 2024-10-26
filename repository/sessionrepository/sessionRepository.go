@@ -52,3 +52,8 @@ func Add(session *models.Session) error {
 
 	return nil
 }
+
+func Delete(sessionId uuid.UUID) error {
+	fmt.Println("id", sessionId)
+	return nil
+}
