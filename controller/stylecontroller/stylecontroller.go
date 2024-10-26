@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func AddStyle(w http.ResponseWriter, r *http.Request) {
+func Add(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	alias, ok := vars["alias"]
 

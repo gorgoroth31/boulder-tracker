@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gorgoroth31/boulder-tracker/controller/stylecontroller"
 	"github.com/gorilla/mux"
 )
 
@@ -21,21 +20,12 @@ func (app *App) SetupRouter() {
 func apiRouter() *mux.Router {
 	router := mux.NewRouter()
 	setupMiddleware(router)
-	setupSessionController(router)
-	setupStyleController(router)
+	SetupController(router)
 	return router
 }
 
 func setupMiddleware(router *mux.Router) {
 	router.Use(LoggingMiddleware)
-}
-
-func setupSessionController(router *mux.Router) {
-	router.Methods("POST").Path("/session")
-}
-
-func setupStyleController(router *mux.Router) {
-	router.Methods("POST").Path("/style/{alias}").HandlerFunc(stylecontroller.AddStyle)
 }
 
 func mount(r *mux.Router, path string, handler http.Handler) {

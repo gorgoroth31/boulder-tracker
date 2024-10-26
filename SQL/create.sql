@@ -23,6 +23,7 @@ create table boulder(
 create table difficulty (
     Id char(36),
     alias varchar(255),
+    relativeLevel int,
     PRIMARY KEY (Id)
 );
 
