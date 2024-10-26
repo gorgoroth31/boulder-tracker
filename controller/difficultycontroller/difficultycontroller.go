@@ -2,10 +2,10 @@ package difficultycontroller
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/gorgoroth31/boulder-tracker/models/dto"
+	"github.com/gorgoroth31/boulder-tracker/services/difficultyservice"
 )
 
 func Add(w http.ResponseWriter, r *http.Request) {
@@ -18,16 +18,5 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	log.Println(t)
-	// vars := mux.Vars(r)
-	// alias, ok := vars["alias"]
-
-	// if !ok {
-	// 	log.Fatal("No alias in the path")
-	// }
-
-	// err := difficultyservice.Add(alias)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	difficultyservice.Add(*t.ToDifficultyEntity())
 }

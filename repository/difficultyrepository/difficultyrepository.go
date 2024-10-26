@@ -6,9 +6,10 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorgoroth31/boulder-tracker/db"
+	"github.com/gorgoroth31/boulder-tracker/models"
 )
 
-func Add(alias string) error {
+func Add(entity models.Difficulty) error {
 
 	database, err := db.CreateDatabase()
 
@@ -17,14 +18,14 @@ func Add(alias string) error {
 	}
 	defer database.Close()
 
-	stmt, err := database.Prepare("INSERT INTO difficulty (Id, alias) VALUES (?, ?);")
+	stmt, err := database.Prepare("INSERT INTO difficulty (Id, alias, relativeLevel) VALUES (?, ?, ?);")
 
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer stmt.Close()
 
-	result, err := stmt.Exec(uuid.New(), alias)
+	result, err := stmt.Exec(uuid.New(), entity.Alias, entity.RelativeLevel)
 
 	if err != nil {
 		return err

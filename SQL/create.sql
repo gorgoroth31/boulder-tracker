@@ -2,13 +2,11 @@
 
 create table session(
     Id char(36),
-    Date date,
     StartTime date,
     EndTime date,
     BoulderedSolo boolean,
     PRIMARY KEY (Id)
 );
-
 
 create table boulder(
     Id char(36),

@@ -1,9 +1,9 @@
 package styleservice
 
-import "github.com/gorgoroth31/boulder-tracker/repository/StyleRepository"
+import "github.com/gorgoroth31/boulder-tracker/repository/stylerepository"
 
 func Add(style string) error {
-	err := StyleRepository.Add(style)
+	err := stylerepository.Add(style)
 
 	return err
 }

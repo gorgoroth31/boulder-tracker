@@ -1,7 +1,9 @@
 package app
 
 import (
+	"github.com/gorgoroth31/boulder-tracker/controller/difficultycontroller"
 	"github.com/gorgoroth31/boulder-tracker/controller/sessioncontroller"
+	"github.com/gorgoroth31/boulder-tracker/controller/stylecontroller"
 	"github.com/gorilla/mux"
 )
 
@@ -16,9 +18,9 @@ func setupSessionController(router *mux.Router) {
 }
 
 func setupStyleController(router *mux.Router) {
-	//router.Methods("POST").Path("/style/{alias}").HandlerFunc(stylecontroller.Add)
+	router.Methods("POST").Path("/style/{alias}").HandlerFunc(stylecontroller.Add)
 }
 
 func setupDifficultyController(router *mux.Router) {
-	//router.Methods("POST").Path("/difficulty").HandlerFunc(difficultycontroller.Add)
+	router.Methods("POST").Path("/difficulty").HandlerFunc(difficultycontroller.Add)
 }

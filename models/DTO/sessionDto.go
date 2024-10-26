@@ -1,16 +1,30 @@
 package dto
 
 import (
-	"time"
-
+	daterange "github.com/felixenescu/date-range"
 	"github.com/google/uuid"
+	"github.com/gorgoroth31/boulder-tracker/models"
 )
 
 type SessionDto struct {
 	Id            uuid.UUID    `json:"id"`
-	Date          time.Time    `json:"date"`
-	StartTime     time.Time    `json:"startTime"`
-	EndTime       time.Time    `json:"endTime"`
+	VisitTime     DateRangeDto `json:"visitTime"`
 	BoulderedSolo bool         `json:"boulderedSolo"`
 	RoutesSolved  []BoulderDto `json:"routesSolved"`
+}
+
+func (session *SessionDto) ToSessionEntity() *models.Session {
+	daterange := daterange.NewDateRange(session.VisitTime.From, session.VisitTime.To)
+
+	boulderRoutes := []models.Boulder{}
+	for _, boulder := range session.RoutesSolved {
+		boulderRoutes = append(boulderRoutes, *boulder.ToBoulderEntity())
+	}
+
+	return &models.Session{
+		Id:            session.Id,
+		VisitTime:     daterange,
+		BoulderedSolo: session.BoulderedSolo,
+		RoutesSolved:  boulderRoutes,
+	}
 }
