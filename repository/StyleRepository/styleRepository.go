@@ -26,7 +26,6 @@ func Add(style string) error {
 	result, err := stmt.Exec(uuid.New(), style)
 
 	if err != nil {
-		// i get here something is wrong with exec
 		return err
 	}
 

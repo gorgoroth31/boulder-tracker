@@ -1,11 +1,10 @@
 package stylecontroller
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/gorgoroth31/boulder-tracker/services/styleservice"
+	styleservice "github.com/gorgoroth31/boulder-tracker/services/StyleService"
 	"github.com/gorilla/mux"
 )
 
@@ -16,9 +15,8 @@ func AddStyle(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		log.Fatal("No alias in the path")
 	}
-	fmt.Println(alias)
-	return
-	err := styleservice.Add("newStyle")
+
+	err := styleservice.Add(alias)
 	if err != nil {
 		log.Fatal(err)
 	}

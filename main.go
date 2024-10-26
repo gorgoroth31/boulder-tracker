@@ -12,7 +12,7 @@ import (
 func main() {
 	database, err := db.CreateDatabase()
 	if err != nil {
-		log.Fatal("Database connection failed: %s", err.Error())
+		log.Fatal("Database connection failed:")
 	}
 
 	app := &app.App{
