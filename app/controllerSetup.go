@@ -51,7 +51,6 @@ VALUES
 ('26e2e5b9-b1fd-40fa-a1c8-c44feadda09f', 'blau', '4'),
 ('2797f7fb-0655-4888-8525-5b1c4abb88bc', 'rot', '5'),
 ('dc34cea4-4d7f-4eb0-bbe5-bbccd7e3c8c1', 'schwarz', '6');
-
 `,
 		)
 

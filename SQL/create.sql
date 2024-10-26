@@ -19,7 +19,7 @@ create table boulder(
     exhausting boolean,
     SessionId char(36),
     PRIMARY KEY (Id),
-    FOREIGN KEY (SessionId) REFERENCES session(Id)
+    FOREIGN KEY (SessionId) REFERENCES session(Id) ON DELETE CASCADE
 );
 
 create table difficulty (
@@ -39,7 +39,7 @@ create table boulder_style(
     boulderId char(36),
     styleId char(36),
     PRIMARY KEY(boulderId, styleId),
-    FOREIGN KEY (boulderId) REFERENCES boulder(Id),
+    FOREIGN KEY (boulderId) REFERENCES boulder(Id) ON DELETE CASCADE,
     FOREIGN KEY (styleId) REFERENCES style(Id)
 );
 
@@ -47,7 +47,7 @@ create table boulder_feltlike_difficulty(
     boulderId char(36),
     difficultyId char(36),
     PRIMARY KEY (boulderId, difficultyId),
-    FOREIGN KEY (boulderId) REFERENCES boulder(Id),
+    FOREIGN KEY (boulderId) REFERENCES boulder(Id) ON DELETE CASCADE,
     FOREIGN KEY (difficultyId) REFERENCES difficulty(Id)
 );
 
@@ -55,6 +55,6 @@ create table boulder_actual_difficulty(
     boulderId char(36),
     difficultyId char(36),
     PRIMARY KEY (boulderId, difficultyId),
-    FOREIGN Key (boulderId) REFERENCES boulder(Id),
+    FOREIGN Key (boulderId) REFERENCES boulder(Id) ON DELETE CASCADE,
     FOREIGN Key (difficultyId) REFERENCES difficulty(Id)
 );

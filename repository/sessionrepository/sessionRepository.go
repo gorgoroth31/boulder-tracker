@@ -34,9 +34,7 @@ func Add(session *models.Session) error {
 		return err
 	}
 
-	rowInserted, err := result.RowsAffected()
-
-	fmt.Println(rowInserted)
+	_, err = result.RowsAffected()
 
 	if err != nil {
 		return err
@@ -54,6 +52,32 @@ func Add(session *models.Session) error {
 }
 
 func Delete(sessionId uuid.UUID) error {
-	fmt.Println("id", sessionId)
+	// get db connection
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	stmt, err := database.Prepare("DELETE FROM session WHERE Id = ?;")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	result, err := stmt.Exec(sessionId)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = result.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
