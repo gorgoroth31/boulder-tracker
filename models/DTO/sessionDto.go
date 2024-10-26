@@ -1,7 +1,6 @@
 package dto
 
 import (
-	daterange "github.com/felixenescu/date-range"
 	"github.com/google/uuid"
 	"github.com/gorgoroth31/boulder-tracker/models"
 )
@@ -14,8 +13,9 @@ type SessionDto struct {
 }
 
 func (session *SessionDto) ToSessionEntity() *models.Session {
-	daterange := daterange.NewDateRange(session.VisitTime.From, session.VisitTime.To)
+	// TODO: here fails the conversion to convert the time -> custom daterange module?
 
+	daterange := models.NewDateRange(session.VisitTime.From, session.VisitTime.To)
 	boulderRoutes := []models.Boulder{}
 	for _, boulder := range session.RoutesSolved {
 		boulderRoutes = append(boulderRoutes, *boulder.ToBoulderEntity())
@@ -23,7 +23,7 @@ func (session *SessionDto) ToSessionEntity() *models.Session {
 
 	return &models.Session{
 		Id:            session.Id,
-		VisitTime:     daterange,
+		VisitTime:     *daterange,
 		BoulderedSolo: session.BoulderedSolo,
 		RoutesSolved:  boulderRoutes,
 	}

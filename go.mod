@@ -10,7 +10,4 @@ require (
 
 require github.com/gofrs/uuid/v5 v5.3.0
 
-require (
-	filippo.io/edwards25519 v1.1.0 // indirect
-	github.com/felixenescu/date-range v1.0.0
-)
+require filippo.io/edwards25519 v1.1.0 // indirect

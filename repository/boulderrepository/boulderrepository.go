@@ -35,9 +35,7 @@ func Add(boulder *models.Boulder) error {
 		return err
 	}
 
-	rowInserted, err := result.RowsAffected()
-
-	fmt.Println(rowInserted)
+	_, err = result.RowsAffected()
 
 	if err != nil {
 		return err
@@ -74,8 +72,7 @@ func addStyles(boulderId uuid.UUID, styles []models.Style, db *sql.DB) error {
 			return err
 		}
 
-		u, err := result.RowsAffected()
-		fmt.Println(u)
+		_, err = result.RowsAffected()
 		if err != nil {
 			return err
 		}
@@ -116,9 +113,7 @@ func addActualDifficulty(boulder *models.Boulder, db *sql.DB) error {
 		return err
 	}
 
-	u, err := result.RowsAffected()
-
-	fmt.Println(u)
+	_, err = result.RowsAffected()
 
 	if err != nil {
 		return err
@@ -141,8 +136,8 @@ func addFeltLikeDifficulty(boulder *models.Boulder, db *sql.DB) error {
 		return err
 	}
 
-	u, err := result.RowsAffected()
-	fmt.Println(u)
+	_, err = result.RowsAffected()
+
 	if err != nil {
 		return err
 	}

@@ -15,6 +15,7 @@ import (
 func Add(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var sessionDto dto.SessionDto
+
 	err := decoder.Decode(&sessionDto)
 	if err != nil {
 		panic(err)
