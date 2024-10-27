@@ -13,8 +13,6 @@ type SessionDto struct {
 }
 
 func (session *SessionDto) ToSessionEntity() *models.Session {
-	// TODO: here fails the conversion to convert the time -> custom daterange module?
-
 	daterange := models.NewDateRange(session.VisitTime.From, session.VisitTime.To)
 	boulderRoutes := []models.Boulder{}
 	for _, boulder := range session.RoutesSolved {
