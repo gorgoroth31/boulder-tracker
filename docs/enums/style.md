@@ -1,0 +1,1 @@
+slab, überhang, slopey, lang, kurz, statisch, dynamisch, stretchy, kraftig, einfach_hoch
