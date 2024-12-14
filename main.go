@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -22,5 +23,12 @@ func main() {
 
 	app.SetupRouter()
 
-	log.Fatal(http.ListenAndServe("127.0.0.1:8080", app.Router))
+	ipAddress := "127.0.0.1"
+	port := "8080"
+
+	ipWithPort := ipAddress + ":" + port
+
+	fmt.Println("BoulderTracker.API is now listening at " + ipWithPort)
+
+	log.Fatal(http.ListenAndServe(ipWithPort, app.Router))
 }

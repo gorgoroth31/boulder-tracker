@@ -89,6 +89,6 @@ VALUES
 func setupHealthController(router *mux.Router) {
 	router.Methods("GET").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("health got pinged")
-		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("api is alive and well"))
 	})
 }
