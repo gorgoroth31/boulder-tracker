@@ -16,6 +16,7 @@ func SetupController(router *mux.Router) {
 	setupStyleController(router)
 	setupDifficultyController(router)
 	initDifficultyAndStyleController(router)
+	setupHealthController(router)
 }
 
 func setupSessionController(router *mux.Router) {
@@ -82,5 +83,12 @@ VALUES
 			fmt.Println(err)
 			return
 		}
+	})
+}
+
+func setupHealthController(router *mux.Router) {
+	router.Methods("GET").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("health got pinged")
+		w.WriteHeader(http.StatusOK)
 	})
 }
