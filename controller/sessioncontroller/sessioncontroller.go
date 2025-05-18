@@ -7,14 +7,14 @@ import (
 
 	"github.com/gofrs/uuid/v5"
 	guid "github.com/google/uuid"
-	"github.com/gorgoroth31/boulder-tracker/models/dto"
+	"github.com/gorgoroth31/boulder-tracker/models"
 	"github.com/gorgoroth31/boulder-tracker/services/sessionservice"
 	"github.com/gorilla/mux"
 )
 
 func Add(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
-	var sessionDto dto.SessionDto
+	var sessionDto models.SessionDto
 
 	err := decoder.Decode(&sessionDto)
 	if err != nil {
@@ -32,4 +32,14 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sessionservice.Delete(guid.UUID(uuid.FromStringOrNil(id)))
+}
+
+func GetAllSessionsSimple(w http.ResponseWriter, r *http.Request) {
+	sessions := sessionservice.GetAllSessionsSimple()
+
+	encoder := json.NewEncoder(w)
+
+	encoder.Encode(sessions)
+
+	w.WriteHeader(http.StatusOK)
 }

@@ -22,6 +22,7 @@ func SetupController(router *mux.Router) {
 func setupSessionController(router *mux.Router) {
 	router.Methods("POST").Path("/session").HandlerFunc(sessioncontroller.Add)
 	router.Methods("DELETE").Path("/session/{id}").HandlerFunc(sessioncontroller.Delete)
+	router.Methods("GET").Path("/session").HandlerFunc(sessioncontroller.GetAllSessionsSimple)
 }
 
 func setupStyleController(router *mux.Router) {

@@ -5,11 +5,11 @@ import (
 	"log"
 
 	"github.com/google/uuid"
-	"github.com/gorgoroth31/boulder-tracker/models/dto"
+	"github.com/gorgoroth31/boulder-tracker/models"
 	"github.com/gorgoroth31/boulder-tracker/repository/sessionrepository"
 )
 
-func AddSession(session *dto.SessionDto) error {
+func AddSession(session *models.SessionDto) error {
 	sessionEntity := session.ToSessionEntity()
 	err := sessionrepository.Add(sessionEntity)
 	if err != nil {
@@ -26,4 +26,20 @@ func Delete(sessionId uuid.UUID) error {
 		return err
 	}
 	return nil
+}
+
+func GetAllSessionsSimple() *[]models.SessionDto {
+	sessions, err := sessionrepository.GetAllSessionsSimple()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	sessionsDTO := []models.SessionDto{}
+
+	for _, session := range *sessions {
+		sessionsDTO = append(sessionsDTO, *session.ToSessionDTO())
+	}
+
+	return &sessionsDTO
 }

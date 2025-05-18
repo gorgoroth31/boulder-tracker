@@ -21,8 +21,8 @@ func Add(session *models.Session) error {
 
 	sessionId := uuid.New()
 
-	fmt.Println(session.VisitTime.From)
-	fmt.Println(session.VisitTime.To)
+	fmt.Println(session.StartTime)
+	fmt.Println(session.EndTime)
 
 	stmt, err := database.Prepare("INSERT INTO session (Id, StartTime, EndTime, BoulderedSolo) VALUES (?, ?, ?, ?);")
 
@@ -31,7 +31,7 @@ func Add(session *models.Session) error {
 	}
 	defer stmt.Close()
 
-	result, err := stmt.Exec(sessionId, session.VisitTime.From, session.VisitTime.To, session.BoulderedSolo)
+	result, err := stmt.Exec(sessionId, session.StartTime, session.EndTime, session.BoulderedSolo)
 
 	if err != nil {
 		return err
@@ -83,4 +83,35 @@ func Delete(sessionId uuid.UUID) error {
 	}
 
 	return nil
+}
+
+func GetAllSessionsSimple() (*[]models.Session, error) {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	rows, err := database.Query("SELECT Id, StartTime, EndTime FROM session;")
+
+	if err != nil {
+		return nil, err
+	}
+
+	var sessions []models.Session
+
+	for rows.Next() {
+		var diff models.Session
+		if err := rows.Scan(&diff.Id, &diff.StartTime, &diff.EndTime); err != nil {
+			return &sessions, err
+		}
+		sessions = append(sessions, diff)
+	}
+
+	if err = rows.Err(); err != nil {
+		return &sessions, err
+	}
+
+	return &sessions, nil
 }
