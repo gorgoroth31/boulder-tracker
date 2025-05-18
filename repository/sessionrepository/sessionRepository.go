@@ -21,9 +21,6 @@ func Add(session *models.Session) error {
 
 	sessionId := uuid.New()
 
-	fmt.Println(session.StartTime)
-	fmt.Println(session.EndTime)
-
 	stmt, err := database.Prepare("INSERT INTO session (Id, StartTime, EndTime, BoulderedSolo) VALUES (?, ?, ?, ?);")
 
 	if err != nil {
