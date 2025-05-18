@@ -34,6 +34,4 @@ func GetAll(w http.ResponseWriter, r *http.Request) {
 	encoder := json.NewEncoder(w)
 
 	encoder.Encode(list)
-
-	w.WriteHeader(http.StatusOK)
 }

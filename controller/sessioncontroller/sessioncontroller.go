@@ -40,6 +40,4 @@ func GetAllSessionsSimple(w http.ResponseWriter, r *http.Request) {
 	encoder := json.NewEncoder(w)
 
 	encoder.Encode(sessions)
-
-	w.WriteHeader(http.StatusOK)
 }
