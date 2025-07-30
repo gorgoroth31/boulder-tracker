@@ -12,6 +12,8 @@ type Session struct {
 	EndTime       time.Time
 	BoulderedSolo bool
 	RoutesSolved  []Boulder
+	IsDeleted     bool
+	UserId        uuid.UUID
 }
 
 type SessionDto struct {
@@ -19,6 +21,8 @@ type SessionDto struct {
 	VisitTime     DateRangeDto `json:"visitTime"`
 	BoulderedSolo bool         `json:"boulderedSolo"`
 	RoutesSolved  []BoulderDto `json:"routesSolved"`
+	IsDeleted     bool         `json:"isDeleted"`
+	UserId        uuid.UUID    `json:"UserId"`
 }
 
 func (session *Session) ToSessionDTO() *SessionDto {

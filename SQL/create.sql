@@ -1,15 +1,29 @@
 -- FIRST VERSION: 25.10.2024 1830
+-- UPDATED: 30.07.2025 14:40
+
+DROP DATABASE IF EXISTS bouldertracker;
 
 CREATE DATABASE bouldertracker CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 use bouldertracker;
+
+create table user(
+    Id char(36),
+    UserName varchar(255),
+    Email varchar(255),
+    IsDeleted boolean,
+    PRIMARY KEY (Id)
+);
 
 create table session(
     Id char(36),
     StartTime datetime,
     EndTime datetime,
     BoulderedSolo boolean,
-    PRIMARY KEY (Id)
+    IsDeleted boolean,
+    UserId char(36),
+    PRIMARY KEY (Id),
+    FOREIGN KEY (UserId) REFERENCES user(Id) ON DELETE CASCADE
 );
 
 create table boulder(
