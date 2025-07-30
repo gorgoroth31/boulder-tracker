@@ -18,7 +18,7 @@ func (app *App) SetupRouter() {
 }
 
 func apiRouter() *mux.Router {
-	router := mux.NewRouter()
+	router := mux.NewRouter().StrictSlash(true)
 	setupMiddleware(router)
 	SetupController(router)
 	return router
