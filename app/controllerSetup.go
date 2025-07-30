@@ -7,6 +7,7 @@ import (
 	"github.com/gorgoroth31/boulder-tracker/controller/difficultycontroller"
 	"github.com/gorgoroth31/boulder-tracker/controller/sessioncontroller"
 	"github.com/gorgoroth31/boulder-tracker/controller/stylecontroller"
+	"github.com/gorgoroth31/boulder-tracker/controller/usercontroller"
 	"github.com/gorgoroth31/boulder-tracker/db"
 	"github.com/gorilla/mux"
 )
@@ -17,6 +18,12 @@ func SetupController(router *mux.Router) {
 	setupDifficultyController(router)
 	initDifficultyAndStyleController(router)
 	setupHealthController(router)
+}
+
+func setupUserCOntroller(router *mux.Router) {
+	router.Methods("POST").Path("/user").HandlerFunc(usercontroller.Add)
+	router.Methods("DELETE").Path("/user").HandlerFunc(usercontroller.Delete)
+	router.Methods("GET").Path("/user/byEmail/{email}").HandlerFunc(usercontroller.GetByEmail)
 }
 
 func setupSessionController(router *mux.Router) {
