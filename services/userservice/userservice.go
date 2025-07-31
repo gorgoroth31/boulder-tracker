@@ -2,7 +2,6 @@ package userservice
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/google/uuid"
 	"github.com/gorgoroth31/boulder-tracker/models"
@@ -13,7 +12,8 @@ func AddUser(user *models.UserDto) error {
 	userEntity := user.ToUserEntity()
 	err := userrepository.Add(userEntity)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return err
 	}
 	return nil
 }

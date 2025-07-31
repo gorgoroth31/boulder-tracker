@@ -20,7 +20,7 @@ func Add(user *models.User) error {
 
 	userId := uuid.New()
 
-	stmt, err := database.Prepare("INSERT INTO user (Id, Name, Email, IsDeleted) VALUES (?, ?, ?, ?);")
+	stmt, err := database.Prepare("INSERT INTO user (Id, UserName, Email, IsDeleted) VALUES (?, ?, ?, ?);")
 
 	if err != nil {
 		log.Fatal(err)

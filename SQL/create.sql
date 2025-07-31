@@ -10,7 +10,7 @@ use bouldertracker;
 create table user(
     Id char(36),
     UserName varchar(255),
-    Email varchar(255),
+    Email varchar(255) UNIQUE,
     IsDeleted boolean,
     PRIMARY KEY (Id)
 );

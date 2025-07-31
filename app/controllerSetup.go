@@ -13,6 +13,7 @@ import (
 )
 
 func SetupController(router *mux.Router) {
+	setupUserController(router)
 	setupSessionController(router)
 	setupStyleController(router)
 	setupDifficultyController(router)
@@ -20,7 +21,7 @@ func SetupController(router *mux.Router) {
 	setupHealthController(router)
 }
 
-func setupUserCOntroller(router *mux.Router) {
+func setupUserController(router *mux.Router) {
 	router.Methods("POST").Path("/user").HandlerFunc(usercontroller.Add)
 	router.Methods("DELETE").Path("/user").HandlerFunc(usercontroller.Delete)
 	router.Methods("GET").Path("/user/byEmail/{email}").HandlerFunc(usercontroller.GetByEmail)

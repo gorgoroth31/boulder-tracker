@@ -26,7 +26,6 @@ func main() {
 
 	app.SetupRouter()
 
-	// TODO: move to env variable
 	ipAddress := "localhost"
 	port := "8080"
 

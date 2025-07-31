@@ -2,6 +2,7 @@ package usercontroller
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -18,9 +19,15 @@ func Add(w http.ResponseWriter, r *http.Request) {
 
 	err := decoder.Decode(&userDto)
 	if err != nil {
-		panic(err)
+		w.WriteHeader(403)
+		return
 	}
-	userservice.AddUser(&userDto)
+	err = userservice.AddUser(&userDto)
+
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(409)
+	}
 }
 
 func Delete(w http.ResponseWriter, r *http.Request) {
