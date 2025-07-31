@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"slices"
 
 	"github.com/gorgoroth31/boulder-tracker/app"
 	"github.com/gorgoroth31/boulder-tracker/db"
@@ -25,14 +27,25 @@ func main() {
 	app.SetupRouter()
 
 	// TODO: move to env variable
-	ipAddress := "127.0.0.1"
+	ipAddress := "localhost"
 	port := "8080"
+
+	if len(os.Args) > 1 {
+		argsWithoutProg := os.Args[1:]
+		if slices.Contains(argsWithoutProg, "--host") {
+			for i, v := range argsWithoutProg {
+				if v == "--host" {
+					ipAddress = argsWithoutProg[i+1]
+					break
+				}
+			}
+		}
+	}
 
 	ipWithPort := ipAddress + ":" + port
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"POST", "DELETE", "GET"},
 		AllowCredentials: true,
 	})
 
