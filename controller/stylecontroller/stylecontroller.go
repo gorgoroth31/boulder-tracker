@@ -1,6 +1,8 @@
 package stylecontroller
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -20,4 +22,18 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func GetAll(w http.ResponseWriter, r *http.Request) {
+	list, err := styleservice.GetAll()
+
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	encoder := json.NewEncoder(w)
+
+	encoder.Encode(list)
 }

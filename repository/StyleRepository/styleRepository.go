@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorgoroth31/boulder-tracker/db"
+	"github.com/gorgoroth31/boulder-tracker/models"
 )
 
 func Add(style string) error {
@@ -38,4 +39,35 @@ func Add(style string) error {
 	}
 
 	return nil
+}
+
+func GetAll() (*[]models.Style, error) {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	rows, err := database.Query("SELECT Id, alias FROM style;")
+
+	if err != nil {
+		return nil, err
+	}
+
+	var styleList []models.Style
+
+	for rows.Next() {
+		var diff models.Style
+		if err := rows.Scan(&diff.Id, &diff.Alias); err != nil {
+			return &styleList, err
+		}
+		styleList = append(styleList, diff)
+	}
+
+	if err = rows.Err(); err != nil {
+		return &styleList, err
+	}
+
+	return &styleList, nil
 }

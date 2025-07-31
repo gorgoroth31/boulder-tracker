@@ -35,6 +35,7 @@ func setupSessionController(router *mux.Router) {
 
 func setupStyleController(router *mux.Router) {
 	router.Methods("POST").Path("/style/{alias}").HandlerFunc(stylecontroller.Add)
+	router.Methods("GET").Path("/style").HandlerFunc(stylecontroller.GetAll)
 }
 
 func setupDifficultyController(router *mux.Router) {
@@ -96,7 +97,7 @@ VALUES
 }
 
 func setupHealthController(router *mux.Router) {
-	router.Methods("GET").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	router.Methods("GET").Path("/health").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("health got pinged")
 		w.Write([]byte("api is alive and well"))
 	})
