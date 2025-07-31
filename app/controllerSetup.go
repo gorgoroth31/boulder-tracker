@@ -23,7 +23,7 @@ func SetupController(router *mux.Router) {
 
 func setupUserController(router *mux.Router) {
 	router.Methods("POST").Path("/user").HandlerFunc(usercontroller.Add)
-	router.Methods("DELETE").Path("/user").HandlerFunc(usercontroller.Delete)
+	router.Methods("DELETE").Path("/user/{id}").HandlerFunc(usercontroller.Delete)
 	router.Methods("GET").Path("/user/byEmail/{email}").HandlerFunc(usercontroller.GetByEmail)
 }
 

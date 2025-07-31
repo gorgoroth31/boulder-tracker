@@ -19,7 +19,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 
 	err := decoder.Decode(&userDto)
 	if err != nil {
-		w.WriteHeader(403)
+		w.WriteHeader(400)
 		return
 	}
 	err = userservice.AddUser(&userDto)
@@ -38,7 +38,14 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 		log.Fatal("No id in the path")
 	}
 
-	userservice.Delete(guid.UUID(uuid.FromStringOrNil(id)))
+	err := userservice.Delete(guid.UUID(uuid.FromStringOrNil(id)))
+
+	if err != nil {
+		w.WriteHeader(400)
+		return
+	}
+
+	w.WriteHeader(201)
 }
 
 func GetByEmail(w http.ResponseWriter, r *http.Request) {
@@ -46,12 +53,15 @@ func GetByEmail(w http.ResponseWriter, r *http.Request) {
 	email, ok := vars["email"]
 
 	if !ok {
-		log.Fatal("No email in the path")
+		fmt.Println("No email in the path")
+		w.WriteHeader(403)
+		return
 	}
 
 	user, err := userservice.GetByEmail(email)
 
 	if err != nil {
+		fmt.Println(err)
 		w.WriteHeader(400)
 		return
 	}

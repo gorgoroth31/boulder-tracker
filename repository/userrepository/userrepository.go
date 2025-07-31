@@ -81,16 +81,20 @@ func GetByEmail(userEmail string) (*models.User, error) {
 	}
 	defer database.Close()
 
-	stmt, err := database.Prepare("SELECT Id, UserName, Email, IsDeleted FROM session where Email = ?")
+	stmt, err := database.Prepare("SELECT Id, UserName, Email, IsDeleted FROM user where Email = ?")
+
+	if err != nil {
+		return nil, err
+	}
 
 	defer stmt.Close()
 
-	var user *models.User
+	var user models.User
 
 	err = stmt.QueryRow(userEmail).Scan(&user.Id, &user.UserName, &user.Email, &user.IsDeleted)
 	if err != nil {
 		return nil, err
 	}
 
-	return user, nil
+	return &user, nil
 }
