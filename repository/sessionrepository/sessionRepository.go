@@ -21,14 +21,14 @@ func Add(session *models.Session) error {
 
 	sessionId := uuid.New()
 
-	stmt, err := database.Prepare("INSERT INTO session (Id, StartTime, EndTime, BoulderedSolo) VALUES (?, ?, ?, ?);")
+	stmt, err := database.Prepare("INSERT INTO session (Id, StartTime, EndTime, BoulderedSolo, UserId) VALUES (?, ?, ?, ?, ?);")
 
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer stmt.Close()
 
-	result, err := stmt.Exec(sessionId, session.StartTime, session.EndTime, session.BoulderedSolo)
+	result, err := stmt.Exec(sessionId, session.StartTime, session.EndTime, session.BoulderedSolo, session.UserId)
 
 	if err != nil {
 		return err
