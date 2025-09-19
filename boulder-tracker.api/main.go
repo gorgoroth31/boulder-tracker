@@ -44,7 +44,7 @@ func main() {
 	ipWithPort := ipAddress + ":" + port
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:5173"},
+		AllowedOrigins: []string{"http://localhost:5173"},
 		AllowedMethods: []string{"GET", "DELETE", "POST", "PUT"},
 		AllowedHeaders: []string{"*"},
 		AllowCredentials: true,
