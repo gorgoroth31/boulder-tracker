@@ -1,10 +1,10 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
 import { useAuth0 } from '@auth0/auth0-vue';
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue';
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/',
@@ -22,7 +22,7 @@ const router = createRouter({
 router.beforeEach((to, from) => {
   const { isAuthenticated } = useAuth0();
 
-  if (!isAuthenticated && to.name !== 'login') {
+  if (!isAuthenticated.value && to.name !== 'login') {
     return { name: 'login' }
   }
 })

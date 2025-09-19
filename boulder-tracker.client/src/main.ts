@@ -26,6 +26,7 @@ import '@fontsource/roboto/700-italic.css'
 import '@fontsource/roboto/900-italic.css'
 
 import '@mdi/font/css/materialdesignicons.css'
+import client from "./plugins/auth";
 
 const vuetify = createVuetify({
   components,
@@ -34,18 +35,10 @@ const vuetify = createVuetify({
 
 const app = createApp(App)
 
-app.use(
-  createAuth0({
-    domain: "dev-bdqydbcfq2gx4x1x.eu.auth0.com",
-    clientId: "BPo522v9iqXwYP3Oy6OvedCmwcmS9lEe",
-    authorizationParams: {
-      redirect_uri: window.location.origin,
-      audience: "http://localhost:8080/api"
-    }
-  })
-);
-
 app.use(router)
+
+app.use(client);
+
 app.use(vuetify)
 
 app.mount('#app')

@@ -16,17 +16,19 @@ import UserProfile from '../components/auth/UserProfile.vue';
 
 import { useAuth0 } from '@auth0/auth0-vue';
 import Logout from '../components/auth/Logout.vue';
+import {getHealthCheck} from "@/api/api";
 
 const { getAccessTokenSilently } = useAuth0();
 
 async function doSomethingWithToken() {
-  const token = await getAccessTokenSilently();
-  const response = await fetch('http://localhost:8080/api/health', {
-    headers: {
-      Authorization: 'Bearer ' + token
-    }
-  });
-  const data = await response.json();
+    await getHealthCheck();
+    // const token = await getAccessTokenSilently();
+    // const response = await fetch('http://localhost:8080/api/health', {
+    //   headers: {
+    //     Authorization: 'Bearer ' + token
+    //   }
+    // });
+    // const data = await response.json();
 }
 
 </script>
