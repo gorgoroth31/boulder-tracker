@@ -19,6 +19,8 @@ instance.interceptors.request.use(
     }
 )
 
-export async function getHealthCheck() : Promise<void> {
-    await instance.get(url + "/health").then((response) => {console.log(response)})
+export async function getHealthCheck() : Promise<string> {
+    return await instance.get(url + "/health").then((response) => {
+        return response.data;
+    })
 }
