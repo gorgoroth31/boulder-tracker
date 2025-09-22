@@ -19,8 +19,14 @@ instance.interceptors.request.use(
     }
 )
 
+export default instance
+
 export async function getHealthCheck() : Promise<string> {
     return await instance.get(url + "/health").then((response) => {
         return response.data;
     })
+}
+
+export async function existsUserByClaims() : Promise<boolean> {
+    return await instance.get(url + "/user/exists").then(response => response.data);
 }

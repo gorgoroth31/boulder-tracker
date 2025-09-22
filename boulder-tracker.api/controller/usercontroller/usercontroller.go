@@ -16,18 +16,20 @@ import (
 )
 
 func AddUserForPrincipal(w http.ResponseWriter, r *http.Request) {
-	decoder := json.NewDecoder(r.Body)
 	var userDto models.UserDto
+
+	err := json.NewDecoder(r.Body).Decode(&userDto)
+	if err != nil {
+		w.WriteHeader(400)
+		return
+	}
+
+	fmt.Println(userDto.UserName)
 
 	token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
 
 	userDto.Principal = token.RegisteredClaims.Subject
 
-	err := decoder.Decode(&userDto)
-	if err != nil {
-		w.WriteHeader(400)
-		return
-	}
 	err = userservice.AddUser(&userDto)
 
 	if err != nil {

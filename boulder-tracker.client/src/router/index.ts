@@ -4,6 +4,8 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue';
 import client, {getAccessToken} from "../plugins/auth";
 import LogoutView from "../views/LogoutView.vue";
+import {existsUserByClaims} from "../api/api";
+import RegistrationView from "../views/RegistrationView.vue";
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -32,6 +34,17 @@ const router = createRouter({
                     return false
                 }
             }
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: RegistrationView,
+            beforeEnter: async (to, from) => {
+                const exists = await existsUserByClaims();
+                
+                // if user exists in db, he isn't allowed to naivgate there
+                return !exists;
+            }
         }
     ],
 })
@@ -40,6 +53,12 @@ router.beforeEach(async (to, from) => {
     await client.checkSession()
     if (to.name !== 'login' && !client.isAuthenticated.value) {
         return "/login";
+    }
+    
+    const exists = await existsUserByClaims();
+    
+    if (to.name !== 'register' && !exists) {
+        return "/register";
     }
 })
 

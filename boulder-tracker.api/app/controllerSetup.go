@@ -22,11 +22,9 @@ func SetupController(router *mux.Router) {
 }
 
 func setupUserController(router *mux.Router) {
-	// todo rewrite to middleware to automatically create user from claims
 	router.Handle("/user/login", middleware.EnsureValidToken()(baseHandlerFunc(usercontroller.AddUserForPrincipal, ""))).Methods("POST")
 	router.Handle("/user/exists", middleware.EnsureValidToken()(baseHandlerFunc(usercontroller.ExistsUserWithPrincipal, ""))).Methods("GET")
 	router.Handle("/user/{id}", middleware.EnsureValidToken()(baseHandlerFunc(usercontroller.Delete, ""))).Methods("DELETE")
-	// todo rewrite to use principal (sub from jwt)
 	router.Handle("/user/login", middleware.EnsureValidToken()(baseHandlerFunc(usercontroller.GetByPrincipalForLogin, ""))).Methods("GET")
 }
 
