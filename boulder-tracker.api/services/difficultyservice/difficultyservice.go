@@ -1,8 +1,8 @@
 package difficultyservice
 
 import (
-	"github.com/gorgoroth31/boulder-tracker/models"
-	"github.com/gorgoroth31/boulder-tracker/repository/difficultyrepository"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/repository/difficultyrepository"
 )
 
 func Add(entity models.Difficulty) error {

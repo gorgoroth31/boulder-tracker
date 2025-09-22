@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gorgoroth31/boulder-tracker/models"
-	"github.com/gorgoroth31/boulder-tracker/services/difficultyservice"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/services/difficultyservice"
 )
 
 func Add(w http.ResponseWriter, r *http.Request) {

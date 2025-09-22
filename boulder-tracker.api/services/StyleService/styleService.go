@@ -1,8 +1,8 @@
 package styleservice
 
 import (
-	"github.com/gorgoroth31/boulder-tracker/models"
-	stylerepository "github.com/gorgoroth31/boulder-tracker/repository/styleRepository"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
+	stylerepository "github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/repository/styleRepository"
 )
 
 func Add(style string) error {

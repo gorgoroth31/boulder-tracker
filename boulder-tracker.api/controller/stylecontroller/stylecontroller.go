@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	styleservice "github.com/gorgoroth31/boulder-tracker/services/StyleService"
+	styleservice "github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/services/StyleService"
 	"github.com/gorilla/mux"
 )
 

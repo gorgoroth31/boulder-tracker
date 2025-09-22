@@ -8,8 +8,8 @@ import (
 
 	"github.com/gofrs/uuid/v5"
 	guid "github.com/google/uuid"
-	"github.com/gorgoroth31/boulder-tracker/models"
-	"github.com/gorgoroth31/boulder-tracker/services/userservice"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/services/userservice"
 	"github.com/gorilla/mux"
 )
 

@@ -5,8 +5,8 @@ import (
 	"log"
 
 	"github.com/google/uuid"
-	"github.com/gorgoroth31/boulder-tracker/db"
-	"github.com/gorgoroth31/boulder-tracker/models"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/db"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
 )
 
 func Add(entity models.Difficulty) error {

@@ -1,4 +1,4 @@
-module github.com/gorgoroth31/boulder-tracker
+module github.com/gorgoroth31/boulder-tracker/boulder-tracker.api
 
 go 1.24.7
 

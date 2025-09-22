@@ -7,8 +7,8 @@ import (
 	"os"
 	"slices"
 
-	"github.com/gorgoroth31/boulder-tracker/app"
-	"github.com/gorgoroth31/boulder-tracker/db"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/app"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/db"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )

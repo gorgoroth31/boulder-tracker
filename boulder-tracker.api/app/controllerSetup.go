@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gorgoroth31/boulder-tracker/controller/difficultycontroller"
-	"github.com/gorgoroth31/boulder-tracker/controller/sessioncontroller"
-	"github.com/gorgoroth31/boulder-tracker/controller/stylecontroller"
-	"github.com/gorgoroth31/boulder-tracker/controller/usercontroller"
-	"github.com/gorgoroth31/boulder-tracker/db"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/controller/difficultycontroller"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/controller/sessioncontroller"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/controller/stylecontroller"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/controller/usercontroller"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/db"
 	"github.com/gorilla/mux"
 )
 

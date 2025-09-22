@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
-	"github.com/gorgoroth31/boulder-tracker/app/middleware"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/app/middleware"
 )
 
 type App struct {
