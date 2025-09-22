@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
+	"github.com/gorgoroth31/boulder-tracker/app/middleware"
 )
 
 type App struct {
@@ -25,7 +26,7 @@ func apiRouter() *mux.Router {
 }
 
 func setupMiddleware(router *mux.Router) {
-	router.Use(LoggingMiddleware)
+	router.Use(middleware.SetupLogging)
 }
 
 func mount(r *mux.Router, path string, handler http.Handler) {

@@ -33,3 +33,5 @@ auth.config.json
 
 ./idea
 ./vscode
+
+.env
