@@ -20,7 +20,7 @@ func Add(boulder *models.Boulder) error {
 	}
 	defer database.Close()
 
-	stmt, err := database.Prepare("INSERT INTO boulder (Id, attempts, sessionsTried, exhausting, SessionId) VALUES (?, ?, ?, ?, ?);")
+	stmt, err := database.Prepare("INSERT INTO boulders (Id, attempts, sessionsTried, exhausting, SessionId) VALUES (?, ?, ?, ?, ?);")
 
 	if err != nil {
 		log.Fatal(err)
@@ -61,7 +61,7 @@ func Add(boulder *models.Boulder) error {
 func addStyles(boulderId uuid.UUID, styles []models.Style, db *sql.DB) error {
 
 	for _, style := range styles {
-		stmt, err := db.Prepare("INSERT INTO boulder_style (boulderId, styleId) VALUES (?, ?);")
+		stmt, err := db.Prepare("INSERT INTO boulder_styles (boulderId, styleId) VALUES (?, ?);")
 		if err != nil {
 			log.Fatal(err)
 		}

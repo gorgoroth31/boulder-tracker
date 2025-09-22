@@ -18,7 +18,7 @@ func Add(entity models.Difficulty) error {
 	}
 	defer database.Close()
 
-	stmt, err := database.Prepare("INSERT INTO difficulty (Id, alias, relativeLevel) VALUES (?, ?, ?);")
+	stmt, err := database.Prepare("INSERT INTO difficulties (Id, alias, relativeLevel) VALUES (?, ?, ?);")
 
 	if err != nil {
 		log.Fatal(err)
@@ -50,7 +50,7 @@ func GetAll() (*[]models.Difficulty, error) {
 	}
 	defer database.Close()
 
-	rows, err := database.Query("SELECT * FROM difficulty;")
+	rows, err := database.Query("SELECT * FROM difficulties;")
 
 	if err != nil {
 		return nil, err

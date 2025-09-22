@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 
+	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
+	"github.com/auth0/go-jwt-middleware/v2/validator"
 	"github.com/gofrs/uuid/v5"
 	guid "github.com/google/uuid"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
@@ -13,9 +15,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func Add(w http.ResponseWriter, r *http.Request) {
+func AddUserForPrincipal(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var userDto models.UserDto
+
+	token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+
+	userDto.Principal = token.RegisteredClaims.Subject
 
 	err := decoder.Decode(&userDto)
 	if err != nil {
@@ -28,6 +34,20 @@ func Add(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		w.WriteHeader(409)
 	}
+}
+
+func ExistsUserWithPrincipal(w http.ResponseWriter, r *http.Request) {
+	token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+
+	exists, err := userservice.ExistsUserWithPrincipal(token.RegisteredClaims.Subject)
+
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+
+	encoder := json.NewEncoder(w)
+	encoder.Encode(exists)
 }
 
 func Delete(w http.ResponseWriter, r *http.Request) {
@@ -48,17 +68,10 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(201)
 }
 
-func GetByEmail(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	email, ok := vars["email"]
+func GetByPrincipalForLogin(w http.ResponseWriter, r *http.Request) {
+	token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
 
-	if !ok {
-		fmt.Println("No email in the path")
-		w.WriteHeader(403)
-		return
-	}
-
-	user, err := userservice.GetByEmail(email)
+	user, err := userservice.GetByPrincipal(token.RegisteredClaims.Subject)
 
 	if err != nil {
 		fmt.Println(err)

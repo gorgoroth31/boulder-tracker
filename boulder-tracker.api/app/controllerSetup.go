@@ -23,10 +23,11 @@ func SetupController(router *mux.Router) {
 
 func setupUserController(router *mux.Router) {
 	// todo rewrite to middleware to automatically create user from claims
-	router.Handle("/user", middleware.EnsureValidToken()(baseHandlerFunc(usercontroller.Add, ""))).Methods("POST")
+	router.Handle("/user/login", middleware.EnsureValidToken()(baseHandlerFunc(usercontroller.AddUserForPrincipal, ""))).Methods("POST")
+	router.Handle("/user/exists", middleware.EnsureValidToken()(baseHandlerFunc(usercontroller.ExistsUserWithPrincipal, ""))).Methods("GET")
 	router.Handle("/user/{id}", middleware.EnsureValidToken()(baseHandlerFunc(usercontroller.Delete, ""))).Methods("DELETE")
 	// todo rewrite to use principal (sub from jwt)
-	router.Handle("/user/{id}", middleware.EnsureValidToken()(baseHandlerFunc(usercontroller.GetByEmail, ""))).Methods("GET")
+	router.Handle("/user/login", middleware.EnsureValidToken()(baseHandlerFunc(usercontroller.GetByPrincipalForLogin, ""))).Methods("GET")
 }
 
 func setupSessionController(router *mux.Router) {
@@ -53,6 +54,7 @@ func baseHandlerFunc(next func(http.ResponseWriter, *http.Request), scope string
 		token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
 
 		claims := token.CustomClaims.(*middleware.CustomClaims)
+
 		if scope != "" && !claims.HasScope(scope) {
 			w.WriteHeader(http.StatusForbidden)
 			w.Write([]byte(`{"message":"Insufficient scope."}`))

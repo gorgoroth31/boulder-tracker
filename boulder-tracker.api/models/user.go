@@ -5,7 +5,7 @@ import "github.com/google/uuid"
 type User struct {
 	Id        uuid.UUID
 	UserName  string
-	Email     string
+	Principal string
 	IsDeleted bool
 	Sessions  []Session
 }
@@ -13,7 +13,7 @@ type User struct {
 type UserDto struct {
 	Id        uuid.UUID `json:"id"`
 	UserName  string    `json:"userName"`
-	Email     string    `json:"email"`
+	Principal string    `json:"principal"`
 	IsDeleted bool      `json:"isDeleted"`
 }
 
@@ -21,7 +21,7 @@ func (user *User) ToUserDto() *UserDto {
 	return &UserDto{
 		Id:        user.Id,
 		UserName:  user.UserName,
-		Email:     user.Email,
+		Principal: user.Principal,
 		IsDeleted: user.IsDeleted,
 	}
 }
@@ -30,7 +30,7 @@ func (user *UserDto) ToUserEntity() *User {
 	return &User{
 		Id:        user.Id,
 		UserName:  user.UserName,
-		Email:     user.Email,
+		Principal: user.Principal,
 		IsDeleted: user.IsDeleted,
 	}
 }

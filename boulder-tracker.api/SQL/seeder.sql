@@ -1,6 +1,6 @@
 use bouldertracker;
 
-INSERT INTO difficulty (Id, alias, relativeLevel)
+INSERT INTO difficulties (Id, alias, relativeLevel)
 VALUES
 ('e87067fd-71ef-4b5a-8e4d-2d328be9a894', 'gelb', '0'),
 ('fd0f9dcb-72b4-4b83-ad9f-13519fa0f545', 'grün', '1'),
@@ -10,7 +10,7 @@ VALUES
 ('2797f7fb-0655-4888-8525-5b1c4abb88bc', 'rot', '5'),
 ('dc34cea4-4d7f-4eb0-bbe5-bbccd7e3c8c1', 'schwarz', '6');
 
-INSERT INTO style (Id, alias) 
+INSERT INTO styles (Id, alias) 
 VALUES 
 ('e9de5a39-4ca0-4f15-b105-99c87b529a1c', 'slab'),
 ('5174a6e7-0f7d-4fff-a7ab-88b9c08f2fb7', 'überhang'),

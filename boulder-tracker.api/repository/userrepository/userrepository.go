@@ -20,14 +20,14 @@ func Add(user *models.User) error {
 
 	userId := uuid.New()
 
-	stmt, err := database.Prepare("INSERT INTO user (Id, UserName, Email, IsDeleted) VALUES (?, ?, ?, ?);")
+	stmt, err := database.Prepare("INSERT INTO users (Id, UserName, Principal, IsDeleted) VALUES (?, ?, ?, ?);")
 
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer stmt.Close()
 
-	result, err := stmt.Exec(userId, user.UserName, user.Email, false)
+	result, err := stmt.Exec(userId, user.UserName, user.Principal, false)
 
 	if err != nil {
 		return err
@@ -42,6 +42,31 @@ func Add(user *models.User) error {
 	return nil
 }
 
+func ExistsUserWithPrincipal(principal string) (bool, error) {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	stmt, err := database.Prepare("SELECT COUNT(*) FROM users WHERE Principal = ?")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	var count int
+
+	err = stmt.QueryRow(principal).Scan(&count)
+	if err != nil {
+		return count == 1, err
+	}
+
+	return count == 1, nil
+}
+
 func Delete(userId uuid.UUID) error {
 	// get db connection
 	database, err := db.CreateDatabase()
@@ -51,7 +76,7 @@ func Delete(userId uuid.UUID) error {
 	}
 	defer database.Close()
 
-	stmt, err := database.Prepare("DELETE FROM user WHERE Id = ?;")
+	stmt, err := database.Prepare("DELETE FROM users WHERE Id = ?;")
 
 	if err != nil {
 		log.Fatal(err)
@@ -73,7 +98,7 @@ func Delete(userId uuid.UUID) error {
 	return nil
 }
 
-func GetByEmail(userEmail string) (*models.User, error) {
+func GetByPrincipal(principal string) (*models.User, error) {
 	database, err := db.CreateDatabase()
 
 	if err != nil {
@@ -81,7 +106,7 @@ func GetByEmail(userEmail string) (*models.User, error) {
 	}
 	defer database.Close()
 
-	stmt, err := database.Prepare("SELECT Id, UserName, Email, IsDeleted FROM user where Email = ?")
+	stmt, err := database.Prepare("SELECT Id, UserName, Email, IsDeleted FROM users where Principal = ?")
 
 	if err != nil {
 		return nil, err
@@ -91,7 +116,7 @@ func GetByEmail(userEmail string) (*models.User, error) {
 
 	var user models.User
 
-	err = stmt.QueryRow(userEmail).Scan(&user.Id, &user.UserName, &user.Email, &user.IsDeleted)
+	err = stmt.QueryRow(principal).Scan(&user.Id, &user.UserName, &user.Principal, &user.IsDeleted)
 	if err != nil {
 		return nil, err
 	}

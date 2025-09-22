@@ -21,7 +21,7 @@ func Add(session *models.Session) error {
 
 	sessionId := uuid.New()
 
-	stmt, err := database.Prepare("INSERT INTO session (Id, StartTime, EndTime, BoulderedSolo, UserId) VALUES (?, ?, ?, ?, ?);")
+	stmt, err := database.Prepare("INSERT INTO sessions (Id, StartTime, EndTime, BoulderedSolo, UserId) VALUES (?, ?, ?, ?, ?);")
 
 	if err != nil {
 		log.Fatal(err)
@@ -60,7 +60,7 @@ func Delete(sessionId uuid.UUID) error {
 	}
 	defer database.Close()
 
-	stmt, err := database.Prepare("DELETE FROM session WHERE Id = ?;")
+	stmt, err := database.Prepare("DELETE FROM sessions WHERE Id = ?;")
 
 	if err != nil {
 		log.Fatal(err)
@@ -90,7 +90,7 @@ func GetAllSessionsSimple() (*[]models.Session, error) {
 	}
 	defer database.Close()
 
-	rows, err := database.Query("SELECT Id, StartTime, EndTime FROM session;")
+	rows, err := database.Query("SELECT Id, StartTime, EndTime FROM sessions;")
 
 	if err != nil {
 		return nil, err

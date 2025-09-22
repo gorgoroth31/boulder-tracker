@@ -18,6 +18,10 @@ func AddUser(user *models.UserDto) error {
 	return nil
 }
 
+func ExistsUserWithPrincipal(principal string) (bool, error) {
+	return userrepository.ExistsUserWithPrincipal(principal)
+}
+
 func Delete(userId uuid.UUID) error {
 	err := userrepository.Delete(userId)
 
@@ -28,8 +32,8 @@ func Delete(userId uuid.UUID) error {
 	return nil
 }
 
-func GetByEmail(userEmail string) (*models.UserDto, error) {
-	user, err := userrepository.GetByEmail(userEmail)
+func GetByPrincipal(principal string) (*models.UserDto, error) {
+	user, err := userrepository.GetByPrincipal(principal)
 
 	if err != nil {
 		return nil, err

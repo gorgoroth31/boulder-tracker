@@ -17,7 +17,7 @@ func Add(style string) error {
 	}
 	defer database.Close()
 
-	stmt, err := database.Prepare("INSERT INTO style (Id, alias) VALUES (?, ?);")
+	stmt, err := database.Prepare("INSERT INTO styles (Id, alias) VALUES (?, ?);")
 
 	if err != nil {
 		log.Fatal(err)
@@ -49,7 +49,7 @@ func GetAll() (*[]models.Style, error) {
 	}
 	defer database.Close()
 
-	rows, err := database.Query("SELECT Id, alias FROM style;")
+	rows, err := database.Query("SELECT Id, alias FROM styles;")
 
 	if err != nil {
 		return nil, err
