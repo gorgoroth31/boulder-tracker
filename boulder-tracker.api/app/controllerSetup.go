@@ -1,7 +1,6 @@
 package app
 
 import (
-	"fmt"
 	"net/http"
 
 	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
@@ -11,7 +10,6 @@ import (
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/controller/sessioncontroller"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/controller/stylecontroller"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/controller/usercontroller"
-	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/db"
 	"github.com/gorilla/mux"
 )
 
@@ -21,110 +19,54 @@ func SetupController(router *mux.Router) {
 	setupSessionController(router)
 	setupStyleController(router)
 	setupDifficultyController(router)
-	initDifficultyAndStyleController(router)
 }
 
 func setupUserController(router *mux.Router) {
-	router.Methods("POST").Path("/user").HandlerFunc(usercontroller.Add)
-	router.Methods("DELETE").Path("/user/{id}").HandlerFunc(usercontroller.Delete)
-	router.Methods("GET").Path("/user/byEmail/{email}").HandlerFunc(usercontroller.GetByEmail)
+	// todo rewrite to middleware to automatically create user from claims
+	router.Handle("/user", middleware.EnsureValidToken()(baseHandlerFunc(usercontroller.Add, ""))).Methods("POST")
+	router.Handle("/user/{id}", middleware.EnsureValidToken()(baseHandlerFunc(usercontroller.Delete, ""))).Methods("DELETE")
+	// todo rewrite to use principal (sub from jwt)
+	router.Handle("/user/{id}", middleware.EnsureValidToken()(baseHandlerFunc(usercontroller.GetByEmail, ""))).Methods("GET")
 }
 
 func setupSessionController(router *mux.Router) {
-	router.Methods("POST").Path("/session").HandlerFunc(sessioncontroller.Add)
-	router.Methods("DELETE").Path("/session/{id}").HandlerFunc(sessioncontroller.Delete)
-	router.Methods("GET").Path("/session").HandlerFunc(sessioncontroller.GetAllSessionsSimple)
+	router.Handle("/session", middleware.EnsureValidToken()(baseHandlerFunc(sessioncontroller.Add, ""))).Methods("POST")
+	router.Handle("/session/{id}", middleware.EnsureValidToken()(baseHandlerFunc(sessioncontroller.Delete, ""))).Methods("DELETE")
+	router.Handle("/session", middleware.EnsureValidToken()(baseHandlerFunc(sessioncontroller.GetAllSessionsSimple, ""))).Methods("GET")
 }
 
 func setupStyleController(router *mux.Router) {
-	router.Methods("POST").Path("/style/{alias}").HandlerFunc(stylecontroller.Add)
-	router.Methods("GET").Path("/style").HandlerFunc(stylecontroller.GetAll)
+	router.Handle("/style/{alias}", middleware.EnsureValidToken()(baseHandlerFunc(stylecontroller.Add, ""))).Methods("POST")
+	router.Handle("/style", middleware.EnsureValidToken()(baseHandlerFunc(stylecontroller.GetAll, ""))).Methods("GET")
 }
 
 func setupDifficultyController(router *mux.Router) {
-	router.Methods("POST").Path("/difficulty").HandlerFunc(difficultycontroller.Add)
-	router.Methods("GET").Path("/difficulty").HandlerFunc(difficultycontroller.GetAll)
+	router.Handle("/difficulty", middleware.EnsureValidToken()(baseHandlerFunc(difficultycontroller.Add, ""))).Methods("POST")
+	router.Handle("/difficulty", middleware.EnsureValidToken()(baseHandlerFunc(difficultycontroller.GetAll, ""))).Methods("GET")
 }
 
-func initDifficultyAndStyleController(router *mux.Router) {
-	router.Methods("POST").Path("/init").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		db, err := db.CreateDatabase()
-		if err != nil {
-			fmt.Println(err)
+func baseHandlerFunc(next func(http.ResponseWriter, *http.Request), scope string) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		w.Header().Set("Content-Type", "application/json")
+
+		token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+
+		claims := token.CustomClaims.(*middleware.CustomClaims)
+		if scope != "" && !claims.HasScope(scope) {
+			w.WriteHeader(http.StatusForbidden)
+			w.Write([]byte(`{"message":"Insufficient scope."}`))
 			return
 		}
 
-		_, err = db.Exec(
-			`
-INSERT INTO difficulty (Id, alias, relativeLevel)
-VALUES
-('e87067fd-71ef-4b5a-8e4d-2d328be9a894', 'gelb', '0'),
-('fd0f9dcb-72b4-4b83-ad9f-13519fa0f545', 'grün', '1'),
-('3cbdaefc-b51d-4a9d-a6d6-bf47b536bcea', 'orange', '2'),
-('139371d9-e707-4bfe-b3c9-16c0a5535d1d', 'weiß', '3'),
-('26e2e5b9-b1fd-40fa-a1c8-c44feadda09f', 'blau', '4'),
-('2797f7fb-0655-4888-8525-5b1c4abb88bc', 'rot', '5'),
-('dc34cea4-4d7f-4eb0-bbe5-bbccd7e3c8c1', 'schwarz', '6');
-`,
-		)
-
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		_, err = db.Exec(
-			`
-INSERT INTO style (Id, alias) 
-VALUES 
-('e9de5a39-4ca0-4f15-b105-99c87b529a1c', 'slab'),
-('5174a6e7-0f7d-4fff-a7ab-88b9c08f2fb7', 'überhang'),
-('c0a26d92-c1ee-4be6-a778-5ef6d13e42dd', 'slopey'),
-('382dc5a4-45f2-49d0-8457-e886dd223240', 'lang'),
-('25da5be5-5857-4e30-9372-a95c502a96e7', 'kurz'),
-('c704d613-e173-4202-bad1-7ecf739b3cc7', 'statisch'),
-('9667d906-8c07-4209-87f0-f3f9096a0f17', 'dynamisch'),
-('21d6312a-1bce-4541-92de-5e118b829789', 'stretchy'),
-('1aa3ddba-7b1c-45a0-9a67-554e8ef0178f', 'kraftig'),
-('79031454-5f7a-4139-b927-31da474b203d', 'einfach hoch');
-
-
-`,
-		)
-
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
+		next(w, r)
 	})
 }
 
 func setupHealthController(router *mux.Router) {
-	router.Methods("GET").Path("/health2").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("health got pinged")
-		w.Write([]byte("api is alive and well"))
-	})
+	router.Handle("/health", middleware.EnsureValidToken()(baseHandlerFunc(health, "")))
+}
 
-	router.Handle("/health", middleware.EnsureValidToken()(
-		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// CORS Headers.
-			w.Header().Set("Access-Control-Allow-Credentials", "true")
-			w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
-			w.Header().Set("Access-Control-Allow-Headers", "Authorization")
-
-			w.Header().Set("Content-Type", "application/json")
-
-			token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
-
-			claims := token.CustomClaims.(*middleware.CustomClaims)
-			if !claims.HasScope("read:user-profile") {
-				w.WriteHeader(http.StatusForbidden)
-				w.Write([]byte(`{"message":"Insufficient scope."}`))
-				return
-			}
-
-			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{"message":"Hello from a private endpoint! You need to be authenticated to see this."}`))
-		}),
-	))
+func health(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("api is alive and well"))
 }

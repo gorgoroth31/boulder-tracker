@@ -2,6 +2,7 @@ package app
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -15,10 +16,20 @@ type App struct {
 }
 
 func (app *App) SetupRouter() {
-	mount(app.Router, "/api", apiRouter())
+	mount(app.Router, "/api/public", apiPublicRouter())
+	mount(app.Router, "/api", apiPrivateRouter())
 }
 
-func apiRouter() *mux.Router {
+func apiPublicRouter() *mux.Router {
+	router := mux.NewRouter().StrictSlash(true)
+	router.Methods("GET").Path("/health").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("health got pinged")
+		w.Write([]byte("api is alive and well"))
+	})
+	return router
+}
+
+func apiPrivateRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 	setupMiddleware(router)
 	SetupController(router)
@@ -27,6 +38,7 @@ func apiRouter() *mux.Router {
 
 func setupMiddleware(router *mux.Router) {
 	router.Use(middleware.SetupLogging)
+	router.Use(middleware.EnsureValidToken())
 }
 
 func mount(r *mux.Router, path string, handler http.Handler) {
