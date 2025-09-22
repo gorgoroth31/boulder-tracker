@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
+	"github.com/auth0/go-jwt-middleware/v2/validator"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/app/middleware"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/controller/difficultycontroller"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/controller/sessioncontroller"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/controller/stylecontroller"
@@ -97,8 +100,31 @@ VALUES
 }
 
 func setupHealthController(router *mux.Router) {
-	router.Methods("GET").Path("/health").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	router.Methods("GET").Path("/health2").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("health got pinged")
 		w.Write([]byte("api is alive and well"))
 	})
+
+	router.Handle("/health", middleware.EnsureValidToken()(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			// CORS Headers.
+			w.Header().Set("Access-Control-Allow-Credentials", "true")
+			w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+			w.Header().Set("Access-Control-Allow-Headers", "Authorization")
+
+			w.Header().Set("Content-Type", "application/json")
+
+			token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+
+			claims := token.CustomClaims.(*middleware.CustomClaims)
+			if !claims.HasScope("read:user-profile") {
+				w.WriteHeader(http.StatusForbidden)
+				w.Write([]byte(`{"message":"Insufficient scope."}`))
+				return
+			}
+
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`{"message":"Hello from a private endpoint! You need to be authenticated to see this."}`))
+		}),
+	))
 }

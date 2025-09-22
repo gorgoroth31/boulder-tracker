@@ -5,10 +5,17 @@
       <UserProfile></UserProfile>
     </div>
     <AddSessionDialog btn-class="position-absolute bottom-0 w-100"></AddSessionDialog>
+    <button @click="stuff">stuff</button>
   </main>
 </template>
 
 <script setup lang="ts">
 import AddSessionDialog from '../components/dialogs/AddSessionDialog.vue';
 import UserProfile from "@/components/auth/UserProfile.vue";
+import {getHealthCheck} from "@/api/api";
+
+async function stuff() {
+  let result = await getHealthCheck()
+  alert(result)
+}
 </script>

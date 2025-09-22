@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 	"time"
 
 	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
@@ -65,4 +66,15 @@ func EnsureValidToken() func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return middleware.CheckJWT(next)
 	}
+}
+
+func (c CustomClaims) HasScope(expectedScope string) bool {
+	result := strings.Split(c.Scope, " ")
+	for i := range result {
+		if result[i] == expectedScope {
+			return true
+		}
+	}
+
+	return false
 }

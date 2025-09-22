@@ -27,7 +27,6 @@ func apiRouter() *mux.Router {
 
 func setupMiddleware(router *mux.Router) {
 	router.Use(middleware.SetupLogging)
-	router.Use(middleware.EnsureValidToken())
 }
 
 func mount(r *mux.Router, path string, handler http.Handler) {
