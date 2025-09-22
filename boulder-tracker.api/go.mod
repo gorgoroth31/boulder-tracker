@@ -11,6 +11,7 @@ require (
 require (
 	github.com/auth0/go-jwt-middleware/v2 v2.3.0
 	github.com/gofrs/uuid/v5 v5.3.0
+	github.com/joho/godotenv v1.5.1
 	github.com/rs/cors v1.11.1
 )
 

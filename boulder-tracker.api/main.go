@@ -10,10 +10,17 @@ import (
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/app"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/db"
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 	"github.com/rs/cors"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println(err)
+		log.Fatal("Error loading .env file")
+	}
+
 	database, err := db.CreateDatabase()
 	if err != nil {
 		log.Fatal("Database connection failed:")
@@ -44,9 +51,9 @@ func main() {
 	ipWithPort := ipAddress + ":" + port
 
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:5173"},
-		AllowedMethods: []string{"GET", "DELETE", "POST", "PUT"},
-		AllowedHeaders: []string{"*"},
+		AllowedOrigins:   []string{"http://localhost:5173"},
+		AllowedMethods:   []string{"GET", "DELETE", "POST", "PUT"},
+		AllowedHeaders:   []string{"*"},
 		AllowCredentials: true,
 	})
 

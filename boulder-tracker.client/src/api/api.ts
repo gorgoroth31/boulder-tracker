@@ -1,5 +1,5 @@
-﻿import { getAccessToken } from '../plugins/auth'
-import axios, {AxiosInstance} from "axios";
+﻿import axios from "axios";
+import {getAccessToken} from "../plugins/auth";
 
 const url = "http://localhost:8080/api";
 
@@ -10,8 +10,8 @@ let instance = axios.create({
 
 instance.interceptors.request.use(
     async (config) => {
-        const accessToken = await getAccessToken()
-        config.headers['Authorization'] = `Bearer ${accessToken}`
+        const token = await getAccessToken()
+        config.headers['Authorization'] = `Bearer ${token}`
         return config
     },
     (error) => {

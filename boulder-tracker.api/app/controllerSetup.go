@@ -13,12 +13,12 @@ import (
 )
 
 func SetupController(router *mux.Router) {
+	setupHealthController(router)
 	setupUserController(router)
 	setupSessionController(router)
 	setupStyleController(router)
 	setupDifficultyController(router)
 	initDifficultyAndStyleController(router)
-	setupHealthController(router)
 }
 
 func setupUserController(router *mux.Router) {
