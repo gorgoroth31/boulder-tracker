@@ -1,9 +1,9 @@
 ﻿import instance from "./api";
 import {User} from "../models/user";
+import {AxiosResponse} from "axios";
 
-export async function createUserForClaim(user: User) : Promise<void> {
-    let config = {
-        data: user,
-    }
-    return await instance.post("/user/login", config).then(response => console.log(response.data));
+export async function createUserForClaim(user: User) : Promise<AxiosResponse> {
+    return await instance.post("/user/login", user).then(response => {
+        return response
+    });
 }

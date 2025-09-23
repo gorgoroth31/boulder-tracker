@@ -20,11 +20,9 @@ func AddUserForPrincipal(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&userDto)
 	if err != nil {
-		w.WriteHeader(400)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
-	fmt.Println(userDto.UserName)
 
 	token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
 
@@ -36,6 +34,8 @@ func AddUserForPrincipal(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		w.WriteHeader(409)
 	}
+
+	w.WriteHeader(201)
 }
 
 func ExistsUserWithPrincipal(w http.ResponseWriter, r *http.Request) {
