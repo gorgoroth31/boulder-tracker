@@ -32,7 +32,7 @@ func AddUserForPrincipal(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		fmt.Println(err)
-		w.WriteHeader(409)
+		w.WriteHeader(400)
 	}
 
 	w.WriteHeader(201)

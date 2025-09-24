@@ -4,6 +4,9 @@
   <div class="text-h6">Du bist jetzt angemeldet! Wie dürfen wir dich nennen?</div>
   <v-text-field class="my-5" v-model="username"></v-text-field>
   <v-btn baseColor="green-darken-1" @click="submit">Speichern</v-btn>
+  <v-snackbar v-model="snackbar">
+    {{snackBarText}}
+  </v-snackbar>
 </template>
 
 <script setup lang="ts">
@@ -15,6 +18,9 @@ import {useRouter} from "vue-router";
 let username = ref('')
 const router = useRouter()
 
+const snackbar = ref(false)
+const snackBarText = ref("Leider ist ein Fehler aufgetreten. Versuche es erneut")
+
 async function submit() {
   // add check if username exists
   let newUser: User = {
@@ -23,10 +29,9 @@ async function submit() {
   const result = await createUserForClaim(newUser)
 
   if (result.status === 201) {
-    // redirect to homepage, else other stuff
-    router.push({path: "/"});
-  } else if (result.status === 409) {
-    // add snackbar that gives info that user exists already
+    await router.push({path: "/"});
+  } else if (result.status === 400) {
+      snackbar.value = true
   }
 }
 </script>
