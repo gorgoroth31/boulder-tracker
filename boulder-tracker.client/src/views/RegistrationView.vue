@@ -1,12 +1,14 @@
 ﻿<template>
-  <div class="text-h4">Registrierung</div>
-  <v-divider thickness="3" class="my-3"></v-divider>
-  <div class="text-h6">Du bist jetzt angemeldet! Wie dürfen wir dich nennen?</div>
-  <v-text-field class="my-5" v-model="username"></v-text-field>
-  <v-btn baseColor="green-darken-1" @click="submit">Speichern</v-btn>
-  <v-snackbar v-model="snackbar">
-    {{snackBarText}}
-  </v-snackbar>
+  <div>
+    <div class="text-h4">Registrierung</div>
+    <v-divider thickness="3" class="my-3"></v-divider>
+    <div class="text-h6">Du bist jetzt angemeldet! Wie dürfen wir dich nennen?</div>
+    <v-text-field class="my-5" v-model="username"></v-text-field>
+    <v-btn baseColor="green-darken-1" @click="submit">Speichern</v-btn>
+    <v-snackbar v-model="snackbar">
+      {{snackBarText}}
+    </v-snackbar>
+  </div>
 </template>
 
 <script setup lang="ts">

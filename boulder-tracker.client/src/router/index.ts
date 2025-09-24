@@ -2,7 +2,7 @@ import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
 import {useAuth0} from '@auth0/auth0-vue';
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue';
-import client, {getAccessToken} from "../plugins/auth";
+import client, {getAccessToken, isUserAuthenticated} from "../plugins/auth";
 import LogoutView from "../views/LogoutView.vue";
 import {existsUserByClaims} from "../api/api";
 import RegistrationView from "../views/RegistrationView.vue";
@@ -62,16 +62,36 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from) => {
-    await client.checkSession()
-    if (to.name !== 'login' && !client.isAuthenticated.value) {
-        return "/login";
+    const isRouteLogin = to.name === "login";
+    const isAuthenticated = await isUserAuthenticated();
+    
+    if (!isAuthenticated && !isRouteLogin) {
+        return "/login"
     }
     
+    // todo: the app does not get the access token, only when i call getAccessTokenWithPopup before, then it works. but is ugly 
+    console.log(await client.getAccessTokenSilently())
+
     const exists = await existsUserByClaims();
-    
+
     if (to.name !== 'register' && !exists) {
         return "/register";
     }
+    
+    // await client.checkSession()
+    // console.log(to.name)
+    // console.log(await isUserAuthenticated())
+    // const isRedirectToLogin = to.name !== 'login' && !await isUserAuthenticated()
+    // console.log(isRedirectToLogin)
+    // if (isRedirectToLogin) {
+    //     return "/login";
+    // }
+    //
+    // const exists = await existsUserByClaims();
+    //
+    // if (to.name !== 'register' && !exists) {
+    //     return "/register";
+    // }
 })
 
 export default router

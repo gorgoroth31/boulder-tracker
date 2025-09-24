@@ -1,4 +1,5 @@
 <template>
+  <UserProfile></UserProfile>
 </template>
 
 <script setup lang="ts">
@@ -6,6 +7,7 @@ import {onMounted, ref} from "vue";
 import {User} from "@/models/user";
 import {getCurrentLoggedInUser} from "@/api/user.api";
 import mainPageUtils from "./../utils/mainPageUtils";
+import UserProfile from "@/components/auth/UserProfile.vue";
 
 const user = ref<User | null>(null); 
 

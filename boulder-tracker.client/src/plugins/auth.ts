@@ -17,5 +17,11 @@ const client: Auth0Plugin = createAuth0({
 export default client
 
 export const getAccessToken = async () => {
+    await client.checkSession()
     return await client.getAccessTokenSilently()
+}
+
+export const isUserAuthenticated = async () => {
+    await client.checkSession();
+    return client.isAuthenticated.value;
 }

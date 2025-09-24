@@ -1,7 +1,7 @@
 ﻿import axios from "axios";
-import {getAccessToken} from "../plugins/auth";
+import client, {getAccessToken} from "../plugins/auth";
 
-const url = "http://localhost:8080/api";
+const url = "http://192.168.178.95:8080/api";
 
 let instance = axios.create({
     baseURL: url,
@@ -28,5 +28,6 @@ export async function getHealthCheck() : Promise<string> {
 }
 
 export async function existsUserByClaims() : Promise<boolean> {
+    await client.checkSession();
     return await instance.get(url + "/user/exists").then(response => response.data);
 }

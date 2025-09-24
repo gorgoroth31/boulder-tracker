@@ -1,13 +1,8 @@
-<script setup lang="ts">
-import { RouterView} from 'vue-router'
-import mainPageUtil from "./utils/mainPageUtils";
-</script>
-
 <template>
   <v-app :class="'overflow-scroll flex flex-col md:flex-row gap-4 ' + mainPageUtil.appCss.value">
       <div class="text-h4 text-break">{{ mainPageUtil.pageTitle.value }}</div>
       <RouterView/>
-      <v-bottom-navigation grow>
+      <v-bottom-navigation grow v-if="isLoggedIn">
         <v-btn to="/" value="home">
           <v-icon>mdi-home</v-icon>
           <span>Home</span>
@@ -26,6 +21,10 @@ import mainPageUtil from "./utils/mainPageUtils";
               <v-list-item to="/about">
                 <v-list-item-title>Über</v-list-item-title>
               </v-list-item>
+
+              <v-list-item to="/logout">
+                <v-list-item-title>Logout</v-list-item-title>
+              </v-list-item>
             </v-list>
           </v-menu>
         </v-btn>
@@ -33,6 +32,15 @@ import mainPageUtil from "./utils/mainPageUtils";
   </v-app>
 </template>
 
-<style scoped>
+<script setup lang="ts">
+import { RouterView} from 'vue-router'
+import mainPageUtil from "./utils/mainPageUtils";
+import {onMounted, ref} from "vue";
+import {isUserAuthenticated} from "@/plugins/auth";
 
-</style>
+const isLoggedIn = ref<boolean>(false);
+
+onMounted(async () => {
+  isLoggedIn.value = isUserAuthenticated()
+})
+</script>

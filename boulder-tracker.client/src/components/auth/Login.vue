@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="login">Log in</button>
+    <v-btn @click="login">Log in</v-btn>
   </div>
 </template>
 <script>
