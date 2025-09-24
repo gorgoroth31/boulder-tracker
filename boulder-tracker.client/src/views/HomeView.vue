@@ -1,21 +1,24 @@
 <template>
   <main class="h-100 position-relative">
-    <div class="dashboard-container">
-      <h1>Dashboard</h1>
-      <UserProfile></UserProfile>
+    <div class="dashboard-container" v-if="user !== null">
+      <h1 class="text-break">Hallo {{user.userName}}</h1>
     </div>
     <AddSessionDialog btn-class="position-absolute bottom-0 w-100"></AddSessionDialog>
-    <button @click="stuff">stuff</button>
   </main>
 </template>
 
 <script setup lang="ts">
 import AddSessionDialog from '../components/dialogs/AddSessionDialog.vue';
-import UserProfile from "@/components/auth/UserProfile.vue";
-import {getHealthCheck} from "@/api/api";
+import {onMounted, ref} from "vue";
+import {User} from "@/models/user";
+import {getCurrentLoggedInUser} from "@/api/user.api";
 
-async function stuff() {
-  let result = await getHealthCheck()
-  alert(result)
-}
+const user = ref<User | null>(null); 
+
+onMounted(async () => {
+  await getCurrentLoggedInUser().then(value => {
+    user.value = value.data;
+  });
+})
+
 </script>

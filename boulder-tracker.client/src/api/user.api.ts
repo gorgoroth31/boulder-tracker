@@ -7,3 +7,9 @@ export async function createUserForClaim(user: User) : Promise<AxiosResponse> {
         return response
     });
 }
+
+export async function getCurrentLoggedInUser() : Promise<AxiosResponse> {
+    return await instance.get("/user/login").then(response => {
+        return response
+    });
+}

@@ -106,7 +106,7 @@ func GetByPrincipal(principal string) (*models.User, error) {
 	}
 	defer database.Close()
 
-	stmt, err := database.Prepare("SELECT Id, UserName, Email, IsDeleted FROM users where Principal = ?")
+	stmt, err := database.Prepare("SELECT Id, UserName, Principal, IsDeleted FROM users where Principal = ?")
 
 	if err != nil {
 		return nil, err
