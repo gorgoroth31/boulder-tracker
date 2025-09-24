@@ -6,6 +6,7 @@ import client, {getAccessToken} from "../plugins/auth";
 import LogoutView from "../views/LogoutView.vue";
 import {existsUserByClaims} from "../api/api";
 import RegistrationView from "../views/RegistrationView.vue";
+import AddSessionView from "../views/AddSessionView.vue";
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -24,6 +25,11 @@ const router = createRouter({
                     return false
                 }
             }
+        },
+        {
+            path: '/sessions/add',
+            name: "addsession",
+            component: AddSessionView,
         },
         {
             path: '/logout',

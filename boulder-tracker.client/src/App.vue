@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterView} from 'vue-router'
+import mainPageUtil from "./utils/mainPageUtils";
 </script>
 
 <template>
-  <RouterView />
+  <main :class="'h-100 overflow-scroll flex flex-col md:flex-row gap-4 p-6 ' + mainPageUtil.css.value">
+    <div class="text-h4 text-break">{{ mainPageUtil.pageTitle }}</div>
+    <RouterView/>
+  </main>
 </template>
 
 <style scoped>
