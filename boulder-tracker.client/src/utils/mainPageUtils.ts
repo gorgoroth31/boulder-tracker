@@ -2,9 +2,11 @@
 
 const pageTitle = ref("Hallo")
 
-const wrapperClass = ref('')
+const appCss = ref('')
+const containerCss = ref('')
 
 export default {
-    css: wrapperClass,
-    pageTitle: pageTitle
+    appCss: appCss,
+    pageTitle: pageTitle,
+    containerCss: containerCss,
 }

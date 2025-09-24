@@ -1,11 +1,4 @@
 <template>
-      <div class="dashboard-container" v-if="user !== null">
-      </div>
-      <v-btn class="w-100 position-absolute bottom-0"
-             color="green-darken-1"
-             text="Neue Session"
-             variant="flat"
-             to="/sessions/add"></v-btn>
 </template>
 
 <script setup lang="ts">
@@ -21,7 +14,6 @@ onMounted(async () => {
     user.value = value.data;
     
     mainPageUtils.pageTitle.value = "Hallo " + user.value.userName
-    mainPageUtils.css.value = "position-relative"
   });
 })
 

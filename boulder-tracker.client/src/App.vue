@@ -4,10 +4,33 @@ import mainPageUtil from "./utils/mainPageUtils";
 </script>
 
 <template>
-  <main :class="'h-100 overflow-scroll flex flex-col md:flex-row gap-4 p-6 ' + mainPageUtil.css.value">
-    <div class="text-h4 text-break">{{ mainPageUtil.pageTitle }}</div>
-    <RouterView/>
-  </main>
+  <v-app :class="'overflow-scroll flex flex-col md:flex-row gap-4 ' + mainPageUtil.appCss.value">
+      <div class="text-h4 text-break">{{ mainPageUtil.pageTitle.value }}</div>
+      <RouterView/>
+      <v-bottom-navigation grow>
+        <v-btn to="/" value="home">
+          <v-icon>mdi-home</v-icon>
+          <span>Home</span>
+        </v-btn>
+
+        <v-btn to="/sessions/add" value="sessions/add">
+          <v-icon>mdi-plus</v-icon>
+          <span>Neue Session</span>
+        </v-btn>
+        
+        <v-btn value="more">
+          <v-icon>mdi-menu</v-icon>
+          <span>More</span>
+          <v-menu activator="parent">
+            <v-list>
+              <v-list-item to="/about">
+                <v-list-item-title>Über</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-btn>
+      </v-bottom-navigation>
+  </v-app>
 </template>
 
 <style scoped>

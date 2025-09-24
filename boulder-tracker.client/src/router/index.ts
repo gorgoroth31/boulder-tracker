@@ -7,6 +7,7 @@ import LogoutView from "../views/LogoutView.vue";
 import {existsUserByClaims} from "../api/api";
 import RegistrationView from "../views/RegistrationView.vue";
 import AddSessionView from "../views/AddSessionView.vue";
+import AboutView from "../views/AboutView.vue";
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -30,6 +31,11 @@ const router = createRouter({
             path: '/sessions/add',
             name: "addsession",
             component: AddSessionView,
+        },
+        {
+            path: "/about",
+            name: "about",
+            component: AboutView,
         },
         {
             path: '/logout',

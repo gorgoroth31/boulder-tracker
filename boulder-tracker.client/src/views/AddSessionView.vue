@@ -8,5 +8,6 @@
 
   onMounted(() => {
     mainPageUtils.pageTitle.value = "Session hinzufügen";
+    
   })
 </script>
