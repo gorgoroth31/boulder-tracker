@@ -4,6 +4,7 @@
     Aktuell hat die App noch kaum Funktionalität, das wird sich aber mit der Zeit ändern. Schau einfach öfter mal vorbei
     :D
   </div>
+  <v-btn @click="stuff">Stuff</v-btn>
   <div class="flex-grow-1"></div>
   <v-btn v-if="!mainPageUtils.isLoggedIn.value" @click="login">Anmelden</v-btn>
 </template>
@@ -11,15 +12,17 @@
 <script setup lang="ts">
 import {onMounted} from "vue";
 import mainPageUtils from "@/utils/mainPageUtils";
-import {useAuth0} from "@auth0/auth0-vue";
-
-const {loginWithRedirect} = useAuth0();
+import {loginWithRedirect} from "@/plugins/auth";
 
 onMounted(async () => {
   mainPageUtils.pageTitle.value = "Über"
 })
 
 function login() {
-  loginWithRedirect();
+  loginWithRedirect()
+}
+
+function stuff() {
+  console.log(import.meta.env)
 }
 </script>

@@ -34,4 +34,4 @@ auth.config.json
 ./idea
 ./vscode
 
-.env
+.env.local

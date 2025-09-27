@@ -1,8 +1,7 @@
 ﻿import axios from "axios";
 import client, {getAccessToken} from "../plugins/auth";
-import authConfig from '../../auth.config.json'
 
-const url = authConfig.serverURL;
+const url = import.meta.env.VITE_SERVER_URL;
 
 let instance = axios.create({
     baseURL: url,

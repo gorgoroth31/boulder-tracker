@@ -1,15 +1,14 @@
 ﻿import type {Auth0Plugin} from '@auth0/auth0-vue'
 import {createAuth0} from '@auth0/auth0-vue'
-import authConfig from '../../auth.config.json'
 const auth0Scopes = "oidc profile email "
 
 const client: Auth0Plugin = createAuth0({
-    domain: authConfig.domain,
-    clientId: authConfig.clientId,
+    domain: import.meta.env.VITE_AUTH_DOMAIN,
+    clientId: import.meta.env.VITE_AUTH_CLIENT_ID,
     authorizationParams: {
         redirect_uri: window.location.origin,
-        audience: authConfig.audience,
-        scope: auth0Scopes + authConfig.scopes,
+        audience: import.meta.env.VITE_AUDIENCE,
+        scope: auth0Scopes + import.meta.env.VITE_SCOPES,
     },
     useRefreshTokens: true,
     useRefreshTokensFallback: true,
@@ -28,4 +27,8 @@ export const getAccessToken = async () => {
 export const isUserAuthenticated = async () => {
     await client.checkSession();
     return client.isAuthenticated.value;
+}
+
+export const loginWithRedirect = async() => {
+    await client.loginWithRedirect()
 }
