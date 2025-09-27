@@ -41,6 +41,6 @@ import {isUserAuthenticated} from "@/plugins/auth";
 const isLoggedIn = ref<boolean>(false);
 
 onMounted(async () => {
-  isLoggedIn.value = isUserAuthenticated()
+  isLoggedIn.value = await isUserAuthenticated()
 })
 </script>
