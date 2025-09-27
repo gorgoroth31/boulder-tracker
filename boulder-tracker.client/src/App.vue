@@ -2,7 +2,7 @@
   <v-app :class="'overflow-scroll flex flex-col md:flex-row gap-4 ' + mainPageUtil.appCss.value">
       <div class="text-h4 text-break">{{ mainPageUtil.pageTitle.value }}</div>
       <RouterView/>
-      <v-bottom-navigation grow v-if="isLoggedIn">
+      <v-bottom-navigation grow v-if="mainPageUtil.isLoggedIn.value">
         <v-btn to="/" value="home">
           <v-icon>mdi-home</v-icon>
           <span>Home</span>
@@ -35,12 +35,4 @@
 <script setup lang="ts">
 import { RouterView} from 'vue-router'
 import mainPageUtil from "./utils/mainPageUtils";
-import {onMounted, ref} from "vue";
-import {isUserAuthenticated} from "@/plugins/auth";
-
-const isLoggedIn = ref<boolean>(false);
-
-onMounted(async () => {
-  isLoggedIn.value = await isUserAuthenticated()
-})
 </script>

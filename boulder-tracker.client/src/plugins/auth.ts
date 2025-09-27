@@ -1,7 +1,6 @@
 ﻿import type {Auth0Plugin} from '@auth0/auth0-vue'
 import {createAuth0} from '@auth0/auth0-vue'
 import authConfig from '../../auth.config.json'
-
 const auth0Scopes = "oidc profile email "
 
 const client: Auth0Plugin = createAuth0({
@@ -11,9 +10,14 @@ const client: Auth0Plugin = createAuth0({
         redirect_uri: window.location.origin,
         audience: authConfig.audience,
         scope: auth0Scopes + authConfig.scopes,
-    }
+    },
+    useRefreshTokens: true,
+    useRefreshTokensFallback: true,
+    cacheLocation: 'localstorage',
 })
 
+// only acceptable use to access client directly is from main.ts
+// every other call should use a wrapper function
 export default client
 
 export const getAccessToken = async () => {

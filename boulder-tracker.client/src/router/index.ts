@@ -1,13 +1,13 @@
-import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
-import {useAuth0} from '@auth0/auth0-vue';
+import {createRouter, createWebHashHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue';
-import client, {getAccessToken, isUserAuthenticated} from "../plugins/auth";
+import {isUserAuthenticated} from "../plugins/auth";
 import LogoutView from "../views/LogoutView.vue";
 import {existsUserByClaims} from "../api/api";
 import RegistrationView from "../views/RegistrationView.vue";
 import AddSessionView from "../views/AddSessionView.vue";
 import AboutView from "../views/AboutView.vue";
+import mainPageUtils from "../utils/mainPageUtils";
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -21,8 +21,9 @@ const router = createRouter({
             path: '/login',
             name: "login",
             component: LoginView,
-            beforeEnter: (to, from) => {
-                if (client.isAuthenticated.value) {
+            beforeEnter: async (to, from) => {
+                const isAuthenticated = await isUserAuthenticated();
+                if (isAuthenticated) {
                     return false
                 }
             }
@@ -41,8 +42,9 @@ const router = createRouter({
             path: '/logout',
             name: "logout",
             component: LogoutView,
-            beforeEnter: (to, from) => {
-                if (!client.isAuthenticated.value) {
+            beforeEnter: async (to, from) => {
+                const isAuthenticated = await isUserAuthenticated();
+                if (!isAuthenticated) {
                     return false
                 }
             }
@@ -62,11 +64,13 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from) => {
-    const isRouteLogin = to.name === "login";
+    const isRouteLogin = to.name === "about";
     const isAuthenticated = await isUserAuthenticated();
+
+    mainPageUtils.isLoggedIn.value = isAuthenticated;
     
     if (!isAuthenticated && !isRouteLogin) {
-        return "login";
+        return "about";
     }
     
     if (!isAuthenticated) {
