@@ -1,7 +1,8 @@
 ﻿import axios from "axios";
 import client, {getAccessToken} from "../plugins/auth";
+import authConfig from '../../auth.config.json'
 
-const url = "http://192.168.178.95:8080/api";
+const url = authConfig.serverURL;
 
 let instance = axios.create({
     baseURL: url,

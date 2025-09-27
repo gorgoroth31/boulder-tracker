@@ -66,32 +66,18 @@ router.beforeEach(async (to, from) => {
     const isAuthenticated = await isUserAuthenticated();
     
     if (!isAuthenticated && !isRouteLogin) {
-        return "/login"
+        return "login";
     }
     
-    // todo: the app does not get the access token, only when i call getAccessTokenWithPopup before, then it works. but is ugly 
-    console.log(await client.getAccessTokenSilently())
-
+    if (!isAuthenticated) {
+        return;
+    }
+    
     const exists = await existsUserByClaims();
 
     if (to.name !== 'register' && !exists) {
         return "/register";
     }
-    
-    // await client.checkSession()
-    // console.log(to.name)
-    // console.log(await isUserAuthenticated())
-    // const isRedirectToLogin = to.name !== 'login' && !await isUserAuthenticated()
-    // console.log(isRedirectToLogin)
-    // if (isRedirectToLogin) {
-    //     return "/login";
-    // }
-    //
-    // const exists = await existsUserByClaims();
-    //
-    // if (to.name !== 'register' && !exists) {
-    //     return "/register";
-    // }
 })
 
 export default router
