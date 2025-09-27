@@ -1,6 +1,5 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import LoginView from '../views/LoginView.vue';
 import {isUserAuthenticated} from "../plugins/auth";
 import LogoutView from "../views/LogoutView.vue";
 import {existsUserByClaims} from "../api/api";
@@ -16,17 +15,6 @@ const router = createRouter({
             path: '/',
             name: 'home',
             component: HomeView,
-        },
-        {
-            path: '/login',
-            name: "login",
-            component: LoginView,
-            beforeEnter: async (to, from) => {
-                const isAuthenticated = await isUserAuthenticated();
-                if (isAuthenticated) {
-                    return false
-                }
-            }
         },
         {
             path: '/sessions/add',

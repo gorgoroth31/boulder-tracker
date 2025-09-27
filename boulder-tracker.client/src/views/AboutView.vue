@@ -1,19 +1,25 @@
-﻿<template>
-  <div class="text-h5">Hier kommt eine putzig kleine About-page hin.</div>
-  <Login v-if="!isLoggedIn"></Login>
+﻿<template class="h-100 d-flex flex-column justify-content-between">
+  <div class="text-h5">
+    Hier kommt eine putzig kleine About-page hin.<br/><br/>
+    Aktuell hat die App noch kaum Funktionalität, das wird sich aber mit der Zeit ändern. Schau einfach öfter mal vorbei
+    :D
+  </div>
+  <div class="flex-grow-1"></div>
+  <v-btn v-if="!mainPageUtils.isLoggedIn.value" @click="login">Anmelden</v-btn>
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted} from "vue";
 import mainPageUtils from "@/utils/mainPageUtils";
-import Login from "@/components/auth/Login.vue";
-import {isUserAuthenticated} from "@/plugins/auth";
+import {useAuth0} from "@auth0/auth0-vue";
 
-const isLoggedIn = ref<boolean>(false);
+const {loginWithRedirect} = useAuth0();
 
 onMounted(async () => {
   mainPageUtils.pageTitle.value = "Über"
-  isLoggedIn.value = await isUserAuthenticated()
-
 })
+
+function login() {
+  loginWithRedirect();
+}
 </script>
