@@ -24,6 +24,13 @@ func AddUserForPrincipal(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if userDto.UserName == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Header().Set("Content-Type", "application/text")
+		w.Write([]byte("Der Nutzername darf nicht leer sein."))
+		return
+	}
+
 	token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
 
 	userDto.Principal = token.RegisteredClaims.Subject
@@ -31,8 +38,10 @@ func AddUserForPrincipal(w http.ResponseWriter, r *http.Request) {
 	err = userservice.AddUser(&userDto)
 
 	if err != nil {
-		fmt.Println(err)
-		w.WriteHeader(400)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Header().Set("Content-Type", "application/text")
+		w.Write([]byte(err.Error()))
+		return
 	}
 
 	w.WriteHeader(201)

@@ -1,7 +1,7 @@
 <template>
   <v-app :class="'overflow-scroll flex flex-col md:flex-row gap-4 ' + mainPageUtil.appCss.value">
       <div class="text-h4 text-break">{{ mainPageUtil.pageTitle.value }}</div>
-    <v-divider thickness="3" class="my-3"></v-divider>
+      <v-divider thickness="3" class="my-3"></v-divider>
       <RouterView/>
       <v-bottom-navigation grow v-if="mainPageUtil.isLoggedIn.value">
         <v-btn to="/" value="home">

@@ -4,7 +4,6 @@
     Aktuell hat die App noch kaum Funktionalität, das wird sich aber mit der Zeit ändern. Schau einfach öfter mal vorbei
     :D
   </div>
-  <v-btn @click="stuff">Stuff</v-btn>
   <div class="flex-grow-1"></div>
   <v-btn v-if="!mainPageUtils.isLoggedIn.value" @click="login">Anmelden</v-btn>
 </template>
@@ -20,9 +19,5 @@ onMounted(async () => {
 
 function login() {
   loginWithRedirect()
-}
-
-function stuff() {
-  console.log(import.meta.env)
 }
 </script>
