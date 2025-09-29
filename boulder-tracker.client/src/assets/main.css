@@ -2,13 +2,21 @@
 @import './custom-vuetify.css';
 
 #app {
-  width: 100vw;
-  height: 100vh;
-  font-weight: normal;
+    width: 100vw;
+    height: 100vh;
+    font-weight: normal;
 }
 
 .padding-1rem {
     padding: 1rem;
+}
+
+.gap-2rem {
+    gap: 2rem;
+}
+
+.link-underline-none {
+    text-decoration: none;
 }
 
 @media (hover: hover) {

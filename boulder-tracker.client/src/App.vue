@@ -1,9 +1,12 @@
 <template>
   <v-app :class="'overflow-scroll flex flex-col md:flex-row gap-4 ' + mainPageUtil.appCss.value">
+    <div class="w-100 bg-amber text-center">Beta-Version</div>
       <div class="padding-1rem">
         <div class="text-h4 text-break">{{ mainPageUtil.pageTitle.value }}</div>
         <v-divider thickness="3" class="my-3"></v-divider>
-        <RouterView/>
+        <div class="mb-15">
+          <RouterView/>
+        </div>
       </div>
       <v-bottom-navigation grow v-if="mainPageUtil.isLoggedIn.value">
         <v-btn to="/" value="home">
@@ -56,7 +59,6 @@ import {useTemplateRef} from "vue";
 import router from "@/router";
 
 const logoutButtonRef = useTemplateRef("logout-btn")
-
 
 function handleLogoutDialog(isLogout: boolean) {
   if (isLogout) {
