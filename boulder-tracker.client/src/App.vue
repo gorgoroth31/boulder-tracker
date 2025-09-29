@@ -27,10 +27,19 @@
                 </v-list-item-title>
               </v-list-item>
 
-              <v-list-item to="/logout">
+              <v-list-item ref="logout-btn">
                 <v-list-item-title class="d-flex ga-2">
                   <v-icon>mdi-logout</v-icon><span>Logout</span>
                 </v-list-item-title>
+                <ConfirmationDialog
+                    okButtonText="Ja"
+                    cancelButtonText="Nein"
+                    title="Logout bestätigen"
+                    text="Möchtest du dich wirklich ausloggen?"
+                    :closeOnBack="false"
+                    @submit="handleLogoutDialog"
+                    :activator="logoutButtonRef">
+                </ConfirmationDialog>
               </v-list-item>
             </v-list>
           </v-menu>
@@ -42,4 +51,16 @@
 <script setup lang="ts">
 import { RouterView} from 'vue-router'
 import mainPageUtil from "./utils/mainPageUtils";
+import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog.vue";
+import {useTemplateRef} from "vue";
+import router from "@/router";
+
+const logoutButtonRef = useTemplateRef("logout-btn")
+
+
+function handleLogoutDialog(isLogout: boolean) {
+  if (isLogout) {
+    router.push("/logout");
+  }
+}
 </script>
