@@ -58,6 +58,37 @@ func Add(boulder *models.Boulder) error {
 	return nil
 }
 
+func GetBouldersForSessionId(sessionId uuid.UUID) (*[]models.Boulder, error) {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	rows, err := database.Query("SELECT Id, ScrewedDifficulty, FeltLikeDifficulty, Attempts, SessionsTried, Exhausting, Style, Like, SessionId FROM boulders WHERE SessionId = ?;", sessionId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var routes []models.Boulder
+
+	for rows.Next() {
+		var diff models.Boulder
+		if err := rows.Scan(&diff.Id, &diff.ScrewedDifficulty, &diff.FeltLikeDifficulty, &diff.Attempts, &diff.SessionsTried, &diff.Exhausting, &diff.Style, &diff.Like, &diff.SessionId); err != nil {
+			return &routes, err
+		}
+		routes = append(routes, diff)
+	}
+
+	if err = rows.Err(); err != nil {
+		return &routes, err
+	}
+
+	return &routes, nil
+}
+
 func addStyles(boulderId uuid.UUID, styles []models.Style, db *sql.DB) error {
 
 	for _, style := range styles {

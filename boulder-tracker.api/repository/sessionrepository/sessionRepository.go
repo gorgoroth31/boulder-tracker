@@ -7,8 +7,68 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/db"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/repository/boulderrepository"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/services/boulderservice"
 )
+
+func ExistsLiveOrInProgressSessionForUser(userId uuid.UUID) (bool, error) {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	stmt, err := database.Prepare("SELECT COUNT(*) FROM sessions WHERE UserId = ? AND SessionState IN (0,1);")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	var count int
+
+	err = stmt.QueryRow(userId).Scan(&count)
+	if err != nil {
+		return count == 1, err
+	}
+
+	return count == 1, nil
+}
+
+func GetLiveOrInProgressSessionForUser(userId uuid.UUID) (*models.Session, error) {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	stmt, err := database.Prepare("SELECT Id, StartTime, EndTime, BoulderedSolo, UserId, IsDeleted, SessionState FROM sessions WHERE UserId = ? AND SessionState IN (0, 1);")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	var session models.Session
+
+	err = stmt.QueryRow(userId).Scan(&session.Id, &session.StartTime, &session.EndTime, &session.BoulderedSolo, &session.UserId, &session.IsDeleted, &session.SessionState)
+	if err != nil {
+		return nil, err
+	}
+
+	// fill in rest of fields
+	routes, err := boulderrepository.GetBouldersForSessionId(session.Id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	session.RoutesSolved = *routes
+
+	return &session, nil
+}
 
 func Add(session *models.Session) error {
 	// get db connection
@@ -21,14 +81,14 @@ func Add(session *models.Session) error {
 
 	sessionId := uuid.New()
 
-	stmt, err := database.Prepare("INSERT INTO sessions (Id, StartTime, EndTime, BoulderedSolo, UserId) VALUES (?, ?, ?, ?, ?);")
+	stmt, err := database.Prepare("INSERT INTO sessions (Id, StartTime, EndTime, BoulderedSolo, SessionState, UserId) VALUES (?, ?, ?, ?, ?, ?);")
 
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer stmt.Close()
 
-	result, err := stmt.Exec(sessionId, session.StartTime, session.EndTime, session.BoulderedSolo, session.UserId)
+	result, err := stmt.Exec(sessionId, session.StartTime, session.EndTime, session.BoulderedSolo, session.SessionState, session.UserId)
 
 	if err != nil {
 		return err
@@ -90,7 +150,7 @@ func GetAllSessionsSimple() (*[]models.Session, error) {
 	}
 	defer database.Close()
 
-	rows, err := database.Query("SELECT Id, StartTime, EndTime FROM sessions;")
+	rows, err := database.Query("SELECT Id, StartTime, EndTime, SessionState FROM sessions;")
 
 	if err != nil {
 		return nil, err
@@ -100,7 +160,7 @@ func GetAllSessionsSimple() (*[]models.Session, error) {
 
 	for rows.Next() {
 		var diff models.Session
-		if err := rows.Scan(&diff.Id, &diff.StartTime, &diff.EndTime); err != nil {
+		if err := rows.Scan(&diff.Id, &diff.StartTime, &diff.EndTime, &diff.SessionState); err != nil {
 			return &sessions, err
 		}
 		sessions = append(sessions, diff)

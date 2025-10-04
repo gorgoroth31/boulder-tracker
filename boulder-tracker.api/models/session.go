@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	sessionState "github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/enums"
 )
 
 type Session struct {
@@ -12,17 +13,19 @@ type Session struct {
 	EndTime       time.Time
 	BoulderedSolo bool
 	RoutesSolved  []Boulder
+	SessionState  sessionState.SessionState
 	IsDeleted     bool
 	UserId        uuid.UUID
 }
 
 type SessionDto struct {
-	Id            uuid.UUID    `json:"id"`
-	VisitTime     DateRangeDto `json:"visitTime"`
-	BoulderedSolo bool         `json:"boulderedSolo"`
-	RoutesSolved  []BoulderDto `json:"routesSolved"`
-	IsDeleted     bool         `json:"isDeleted"`
-	UserId        uuid.UUID    `json:"UserId"`
+	Id            uuid.UUID                 `json:"id"`
+	VisitTime     DateRangeDto              `json:"visitTime"`
+	BoulderedSolo bool                      `json:"boulderedSolo"`
+	RoutesSolved  []BoulderDto              `json:"routesSolved"`
+	SessionState  sessionState.SessionState `json:"sessionState"`
+	IsDeleted     bool                      `json:"isDeleted"`
+	UserId        uuid.UUID                 `json:"UserId"`
 }
 
 func (session *Session) ToSessionDTO() *SessionDto {
@@ -41,6 +44,7 @@ func (session *Session) ToSessionDTO() *SessionDto {
 		VisitTime:     *visitTime,
 		BoulderedSolo: session.BoulderedSolo,
 		RoutesSolved:  boulderRoutes,
+		SessionState:  session.SessionState,
 	}
 }
 
@@ -56,5 +60,6 @@ func (session *SessionDto) ToSessionEntity() *Session {
 		EndTime:       session.VisitTime.To,
 		BoulderedSolo: session.BoulderedSolo,
 		RoutesSolved:  boulderRoutes,
+		SessionState:  session.SessionState,
 	}
 }

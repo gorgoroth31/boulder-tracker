@@ -5,13 +5,40 @@ import (
 	"log"
 
 	"github.com/google/uuid"
+	SessionState "github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/enums"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/repository/sessionrepository"
 )
 
-func AddSession(session *models.SessionDto) error {
-	sessionEntity := session.ToSessionEntity()
-	err := sessionrepository.Add(sessionEntity)
+func GetOrCreateInProgressSessionForUser(userId uuid.UUID) (*models.Session, error) {
+	doesSessionExist, err := sessionrepository.ExistsLiveOrInProgressSessionForUser(userId)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if doesSessionExist {
+		return sessionrepository.GetLiveOrInProgressSessionForUser(userId)
+	}
+
+	if err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
+
+	newSession := models.Session{SessionState: SessionState.InProgress}
+
+	AddSession(&newSession)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return sessionrepository.GetLiveOrInProgressSessionForUser(userId)
+}
+
+func AddSession(session *models.Session) error {
+	err := sessionrepository.Add(session)
 	if err != nil {
 		log.Fatal(err)
 	}

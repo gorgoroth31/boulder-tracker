@@ -21,6 +21,7 @@ create table sessions(
     StartTime datetime,
     EndTime datetime,
     BoulderedSolo boolean,
+    SessionState int,
     IsDeleted boolean,
     UserId char(36),
     PRIMARY KEY (Id),
