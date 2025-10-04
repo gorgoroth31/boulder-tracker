@@ -26,7 +26,7 @@ func GetOrCreateInProgressSessionForUser(userId uuid.UUID) (*models.Session, err
 		return nil, err
 	}
 
-	newSession := models.Session{SessionState: SessionState.InProgress}
+	newSession := models.Session{SessionState: SessionState.InProgress, UserId: userId, IsDeleted: false}
 
 	AddSession(&newSession)
 

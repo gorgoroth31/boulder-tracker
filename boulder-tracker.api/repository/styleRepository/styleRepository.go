@@ -17,7 +17,7 @@ func Add(style string) error {
 	}
 	defer database.Close()
 
-	stmt, err := database.Prepare("INSERT INTO styles (Id, alias) VALUES (?, ?);")
+	stmt, err := database.Prepare("INSERT INTO styles (Id, Alias) VALUES (?, ?);")
 
 	if err != nil {
 		log.Fatal(err)
@@ -49,7 +49,38 @@ func GetAll() (*[]models.Style, error) {
 	}
 	defer database.Close()
 
-	rows, err := database.Query("SELECT Id, alias FROM styles;")
+	rows, err := database.Query("SELECT Id, Alias FROM styles;")
+
+	if err != nil {
+		return nil, err
+	}
+
+	var styleList []models.Style
+
+	for rows.Next() {
+		var diff models.Style
+		if err := rows.Scan(&diff.Id, &diff.Alias); err != nil {
+			return &styleList, err
+		}
+		styleList = append(styleList, diff)
+	}
+
+	if err = rows.Err(); err != nil {
+		return &styleList, err
+	}
+
+	return &styleList, nil
+}
+
+func GetAllByBoulderId(boulderId uuid.UUID) (*[]models.Style, error) {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	rows, err := database.Query("SELECT Id, Alias FROM styles WHERE Id = ?;", boulderId)
 
 	if err != nil {
 		return nil, err

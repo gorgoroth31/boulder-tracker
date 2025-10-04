@@ -1,6 +1,6 @@
 import type { Session } from "./session";
 
-export class User {
+export interface User {
     id: string;
     userName: string;
     email: string;

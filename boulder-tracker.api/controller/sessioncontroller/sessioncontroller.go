@@ -2,6 +2,7 @@ package sessioncontroller
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
@@ -24,6 +25,7 @@ func GetCurrentSession(w http.ResponseWriter, r *http.Request) {
 	session, err := sessionservice.GetOrCreateInProgressSessionForUser(user.Id)
 
 	if err != nil {
+		fmt.Println(err)
 		w.WriteHeader(500)
 		return
 	}

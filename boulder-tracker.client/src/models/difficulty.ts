@@ -1,4 +1,4 @@
-export class Difficulty {
+export interface Difficulty {
     id: string;
     alias: string;
     relativeLevel: string

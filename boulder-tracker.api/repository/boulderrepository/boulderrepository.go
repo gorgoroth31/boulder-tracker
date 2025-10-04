@@ -8,6 +8,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/db"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
+	styleservice "github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/services/StyleService"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/services/difficultyservice"
 )
 
 func Add(boulder *models.Boulder) error {
@@ -20,7 +22,7 @@ func Add(boulder *models.Boulder) error {
 	}
 	defer database.Close()
 
-	stmt, err := database.Prepare("INSERT INTO boulders (Id, attempts, sessionsTried, exhausting, SessionId) VALUES (?, ?, ?, ?, ?);")
+	stmt, err := database.Prepare("INSERT INTO boulders (Id, Attempts, SessionsTried, Exhausting, SessionId) VALUES (?, ?, ?, ?, ?);")
 
 	if err != nil {
 		log.Fatal(err)
@@ -43,19 +45,7 @@ func Add(boulder *models.Boulder) error {
 
 	err = addStyles(boulderId, boulder.Style, database)
 
-	if err != nil {
-		return err
-	}
-
-	boulder.Id = boulderId
-
-	err = addDifficulties(boulder, database)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
 
 func GetBouldersForSessionId(sessionId uuid.UUID) (*[]models.Boulder, error) {
@@ -66,7 +56,7 @@ func GetBouldersForSessionId(sessionId uuid.UUID) (*[]models.Boulder, error) {
 	}
 	defer database.Close()
 
-	rows, err := database.Query("SELECT Id, ScrewedDifficulty, FeltLikeDifficulty, Attempts, SessionsTried, Exhausting, Style, Like, SessionId FROM boulders WHERE SessionId = ?;", sessionId)
+	rows, err := database.Query("SELECT Id, ScrewedDifficultyId, FeltLikeDifficultyId, Attempts, SessionsTried, Exhausting, Likes, SessionId FROM boulders WHERE SessionId = ?;", sessionId)
 
 	if err != nil {
 		return nil, err
@@ -76,9 +66,34 @@ func GetBouldersForSessionId(sessionId uuid.UUID) (*[]models.Boulder, error) {
 
 	for rows.Next() {
 		var diff models.Boulder
-		if err := rows.Scan(&diff.Id, &diff.ScrewedDifficulty, &diff.FeltLikeDifficulty, &diff.Attempts, &diff.SessionsTried, &diff.Exhausting, &diff.Style, &diff.Like, &diff.SessionId); err != nil {
+		if err := rows.Scan(&diff.Id, &diff.ScrewedDifficultyId, &diff.FeltLikeDifficultyId, &diff.Attempts, &diff.SessionsTried, &diff.Exhausting, &diff.Like, &diff.SessionId); err != nil {
 			return &routes, err
 		}
+
+		feltLikeDifficulty, err := difficultyservice.GetById(diff.FeltLikeDifficultyId)
+
+		if err != nil {
+			return nil, err
+		}
+
+		diff.FeltLikeDifficulty = *feltLikeDifficulty
+
+		screwedDifficulty, err := difficultyservice.GetById(diff.ScrewedDifficultyId)
+
+		if err != nil {
+			return nil, err
+		}
+
+		diff.ScrewedDifficulty = *screwedDifficulty
+
+		styles, err := styleservice.GetAllByBoulderId(diff.Id)
+
+		if err != nil {
+			return nil, err
+		}
+
+		diff.Style = append(diff.Style, *styles...)
+
 		routes = append(routes, diff)
 	}
 
@@ -97,13 +112,13 @@ func Update(boulder *models.Boulder) error {
 	}
 	defer database.Close()
 
-	stmt, err := database.Prepare("UPDATE boulders SET Attempts = ?, SessionsTried = ?, Exhausting = ? WHERE Id = ?;")
+	stmt, err := database.Prepare("UPDATE boulders SET Attempts = ?, SessionsTried = ?, Exhausting = ?, FeltLikeDifficultyId = ?, ScrewedDifficultyId WHERE Id = ?;")
 
 	if err != nil {
 		return err
 	}
 
-	result, err := stmt.Exec(boulder.Attempts, boulder.SessionsTried, boulder.Exhausting, boulder.Id)
+	result, err := stmt.Exec(boulder.Attempts, boulder.SessionsTried, boulder.Exhausting, boulder.FeltLikeDifficultyId, boulder.ScrewedDifficultyId, boulder.Id)
 
 	if err != nil {
 		return err
@@ -116,12 +131,6 @@ func Update(boulder *models.Boulder) error {
 	}
 
 	err = updateStylesForBoulder(boulder)
-
-	if err != nil {
-		return err
-	}
-
-	err = updateDifficultyForBoulder(boulder)
 
 	return err
 }
@@ -188,49 +197,6 @@ func addStyleToBoulderId(boulderId uuid.UUID, styleId uuid.UUID) error {
 	return err
 }
 
-func updateDifficultyForBoulder(boulder *models.Boulder) error {
-	database, err := db.CreateDatabase()
-
-	if err != nil {
-		fmt.Println("database connection failed")
-	}
-	defer database.Close()
-
-	stmt, err := database.Prepare("UPDATE boulder_feltlike_difficulty SET DifficultyId = ? WHERE BoulderId = ?;")
-
-	if err != nil {
-		return err
-	}
-
-	result, err := stmt.Exec(boulder.FeltLikeDifficulty.Id, boulder.Id)
-
-	if err != nil {
-		return err
-	}
-
-	_, err = result.RowsAffected()
-
-	if err != nil {
-		return err
-	}
-
-	stmt2, err := database.Prepare("UPDATE boulder_actual_difficulty Set DifficultyId = ? Where BoulderId = ?;")
-
-	if err != nil {
-		return err
-	}
-
-	result2, err := stmt2.Exec(boulder.ScrewedDifficulty.Id, boulder.Id)
-
-	if err != nil {
-		return err
-	}
-
-	_, err = result2.RowsAffected()
-
-	return err
-}
-
 func addStyles(boulderId uuid.UUID, styles []models.Style, db *sql.DB) error {
 
 	for _, style := range styles {
@@ -250,69 +216,6 @@ func addStyles(boulderId uuid.UUID, styles []models.Style, db *sql.DB) error {
 			return err
 		}
 		stmt.Close()
-	}
-
-	return nil
-}
-
-func addDifficulties(boulder *models.Boulder, db *sql.DB) error {
-
-	err := addActualDifficulty(boulder, db)
-
-	if err != nil {
-		return err
-	}
-
-	err = addFeltLikeDifficulty(boulder, db)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func addActualDifficulty(boulder *models.Boulder, db *sql.DB) error {
-	stmt, err := db.Prepare("INSERT INTO boulder_actual_difficulty (boulderId, difficultyId) VALUES (?, ?);")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer stmt.Close()
-
-	result, err := stmt.Exec(boulder.Id, boulder.ScrewedDifficulty.Id)
-
-	if err != nil {
-		return err
-	}
-
-	_, err = result.RowsAffected()
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func addFeltLikeDifficulty(boulder *models.Boulder, db *sql.DB) error {
-	stmt, err := db.Prepare("INSERT INTO boulder_feltlike_difficulty (boulderId, difficultyId) VALUES (?, ?);")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer stmt.Close()
-
-	result, err := stmt.Exec(boulder.Id, boulder.FeltLikeDifficulty.Id)
-
-	if err != nil {
-		return err
-	}
-
-	_, err = result.RowsAffected()
-
-	if err != nil {
-		return err
 	}
 
 	return nil

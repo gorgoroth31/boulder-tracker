@@ -24,5 +24,6 @@ func CreateDatabase() (*sql.DB, error) {
 	db.SetConnMaxLifetime(0)
 	db.SetMaxIdleConns(3)
 	db.SetMaxOpenConns(3)
+	db.Exec("SET SQL_MODE='ALLOW_INVALID_DATES';")
 	return db, nil
 }

@@ -1,6 +1,7 @@
 package styleservice
 
 import (
+	"github.com/google/uuid"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
 	stylerepository "github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/repository/styleRepository"
 )
@@ -25,4 +26,8 @@ func GetAll() (*[]models.StyleDto, error) {
 	}
 
 	return &dtoList, nil
+}
+
+func GetAllByBoulderId(boulderId uuid.UUID) (*[]models.Style, error) {
+	return stylerepository.GetAllByBoulderId(boulderId)
 }

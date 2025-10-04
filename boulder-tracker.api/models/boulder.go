@@ -5,15 +5,17 @@ import (
 )
 
 type Boulder struct {
-	Id                 uuid.UUID
-	ScrewedDifficulty  Difficulty
-	FeltLikeDifficulty Difficulty
-	Attempts           int
-	SessionsTried      int
-	Exhausting         bool
-	Style              []Style
-	Like               bool
-	SessionId          uuid.UUID
+	Id                   uuid.UUID
+	ScrewedDifficulty    Difficulty
+	FeltLikeDifficulty   Difficulty
+	Attempts             int
+	SessionsTried        int
+	Exhausting           bool
+	Style                []Style
+	Like                 bool
+	SessionId            uuid.UUID
+	ScrewedDifficultyId  uuid.UUID
+	FeltLikeDifficultyId uuid.UUID
 }
 
 type BoulderDto struct {

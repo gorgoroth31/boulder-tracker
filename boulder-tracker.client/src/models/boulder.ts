@@ -1,7 +1,7 @@
 import type { Difficulty } from "./difficulty";
 import type { Style } from "./style";
 
-export class Boulder {
+export interface Boulder {
     id: string;
     screwedDifficulty: Difficulty;
     feltLikeDifficulty: Difficulty;

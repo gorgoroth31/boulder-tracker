@@ -1,4 +1,4 @@
-export class Style {
+export interface Style {
     id: string;
     alias: string
 }

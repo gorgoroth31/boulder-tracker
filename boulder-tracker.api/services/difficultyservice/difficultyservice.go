@@ -1,6 +1,7 @@
 package difficultyservice
 
 import (
+	"github.com/google/uuid"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/repository/difficultyrepository"
 )
@@ -24,4 +25,8 @@ func GetAll() (*[]models.DifficultyDto, error) {
 	}
 
 	return &dtoList, nil
+}
+
+func GetById(difficultyId uuid.UUID) (*models.Difficulty, error) {
+	return difficultyrepository.GetById(difficultyId)
 }

@@ -72,3 +72,29 @@ func GetAll() (*[]models.Difficulty, error) {
 
 	return &difficultyList, nil
 }
+
+func GetById(difficultyId uuid.UUID) (*models.Difficulty, error) {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	stmt, err := database.Prepare("SELECT Id, Alias, RelativeLevel FROM difficulties WHERE Id = ?;")
+
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	var difficulty models.Difficulty
+
+	err = stmt.QueryRow(difficultyId).Scan(&difficulty.Id, &difficulty.Alias, &difficulty.RelativeLevel)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &difficulty, nil
+}

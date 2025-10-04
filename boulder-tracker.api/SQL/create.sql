@@ -16,6 +16,19 @@ create table users(
     PRIMARY KEY (Id)
 );
 
+create table difficulties (
+    Id char(36),
+    Alias varchar(255),
+    RelativeLevel int,
+    PRIMARY KEY (Id)
+);
+
+create table styles(
+    Id char(36),
+    Alias varchar(255),
+    PRIMARY KEY (Id)
+);
+
 create table sessions(
     Id char(36),
     StartTime datetime,
@@ -34,21 +47,13 @@ create table boulders(
     SessionsTried int,
     Exhausting boolean,
     SessionId char(36),
+    Likes boolean,
+    ScrewedDifficultyId char(36),
+    FeltLikeDifficultyId char(36),
     PRIMARY KEY (Id),
-    FOREIGN KEY (SessionId) REFERENCES sessions(Id) ON DELETE CASCADE
-);
-
-create table difficulties (
-    Id char(36),
-    Alias varchar(255),
-    RelativeLevel int,
-    PRIMARY KEY (Id)
-);
-
-create table styles(
-    Id char(36),
-    Alias varchar(255),
-    PRIMARY KEY (Id)
+    FOREIGN KEY (SessionId) REFERENCES sessions(Id) ON DELETE CASCADE,
+    FOREIGN KEY (ScrewedDifficultyId) REFERENCES difficulties(Id),
+    FOREIGN KEY (FeltLikeDifficultyId) REFERENCES difficulties(Id)
 );
 
 create table boulder_styles(
@@ -57,20 +62,4 @@ create table boulder_styles(
     PRIMARY KEY(BoulderId, StyleId),
     FOREIGN KEY (BoulderId) REFERENCES boulders(Id) ON DELETE CASCADE,
     FOREIGN KEY (StyleId) REFERENCES styles(Id)
-);
-
-create table boulder_feltlike_difficulty(
-    BoulderId char(36),
-    DifficultyId char(36),
-    PRIMARY KEY (BoulderId, DifficultyId),
-    FOREIGN KEY (BoulderId) REFERENCES boulders(Id) ON DELETE CASCADE,
-    FOREIGN KEY (DifficultyId) REFERENCES difficulties(Id)
-);
-
-create table boulder_actual_difficulty(
-    BoulderId char(36),
-    DifficultyId char(36),
-    PRIMARY KEY (BoulderId, DifficultyId),
-    FOREIGN Key (BoulderId) REFERENCES boulders(Id) ON DELETE CASCADE,
-    FOREIGN Key (DifficultyId) REFERENCES difficulties(Id)
 );

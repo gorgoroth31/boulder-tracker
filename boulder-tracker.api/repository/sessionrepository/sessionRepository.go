@@ -57,7 +57,6 @@ func GetLiveOrInProgressSessionForUser(userId uuid.UUID) (*models.Session, error
 		return nil, err
 	}
 
-	// fill in rest of fields
 	routes, err := boulderservice.GetBouldersForSessionId(session.Id)
 
 	if err != nil {
@@ -116,14 +115,14 @@ func Add(session *models.Session) error {
 
 	sessionId := uuid.New()
 
-	stmt, err := database.Prepare("INSERT INTO sessions (Id, StartTime, EndTime, BoulderedSolo, SessionState, UserId) VALUES (?, ?, ?, ?, ?, ?);")
+	stmt, err := database.Prepare("INSERT INTO sessions (Id, StartTime, EndTime, BoulderedSolo, SessionState, UserId, IsDeleted) VALUES (?, ?, ?, ?, ?, ?, ?);")
 
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer stmt.Close()
 
-	result, err := stmt.Exec(sessionId, session.StartTime, session.EndTime, session.BoulderedSolo, session.SessionState, session.UserId)
+	result, err := stmt.Exec(sessionId, session.StartTime, session.EndTime, session.BoulderedSolo, session.SessionState, session.UserId, session.IsDeleted)
 
 	if err != nil {
 		return err
