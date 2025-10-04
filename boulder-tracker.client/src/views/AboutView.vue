@@ -31,6 +31,10 @@
     </div>
     
     <v-btn class="w-50" href="https://github.com/gorgoroth31/boulder-tracker"><v-icon>mdi-github</v-icon><div class="ml-2">Github</div></v-btn>
+    
+    <div>
+      <div class="text-body1">Das Icon für diese App wurde freundlicherweise von <a href="https://www.flaticon.com/free-icons/bouldering" title="bouldering icons">Gravisio über Flaticon</a> bereitgestellt.</div>
+    </div>
   </div>
 </template>
 
