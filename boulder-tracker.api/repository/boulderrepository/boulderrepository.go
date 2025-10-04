@@ -89,6 +89,148 @@ func GetBouldersForSessionId(sessionId uuid.UUID) (*[]models.Boulder, error) {
 	return &routes, nil
 }
 
+func Update(boulder *models.Boulder) error {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	stmt, err := database.Prepare("UPDATE boulders SET Attempts = ?, SessionsTried = ?, Exhausting = ? WHERE Id = ?;")
+
+	if err != nil {
+		return err
+	}
+
+	result, err := stmt.Exec(boulder.Attempts, boulder.SessionsTried, boulder.Exhausting, boulder.Id)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = result.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	err = updateStylesForBoulder(boulder)
+
+	if err != nil {
+		return err
+	}
+
+	err = updateDifficultyForBoulder(boulder)
+
+	return err
+}
+
+func updateStylesForBoulder(boulder *models.Boulder) error {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	stmt, err := database.Prepare("DELETE from boulder_styles WHERE BoulderId = ?;")
+
+	if err != nil {
+		return err
+	}
+
+	result, err := stmt.Exec(boulder.Id)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = result.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	for _, style := range boulder.Style {
+		err = addStyleToBoulderId(boulder.Id, style.Id)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func addStyleToBoulderId(boulderId uuid.UUID, styleId uuid.UUID) error {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	stmt, err := database.Prepare("INSERT INTO boulder_styles (BoulderId, StyleId) VALUES (?, ?);")
+
+	if err != nil {
+		return err
+	}
+
+	result, err := stmt.Exec(boulderId, styleId)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = result.RowsAffected()
+
+	return err
+}
+
+func updateDifficultyForBoulder(boulder *models.Boulder) error {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	stmt, err := database.Prepare("UPDATE boulder_feltlike_difficulty SET DifficultyId = ? WHERE BoulderId = ?;")
+
+	if err != nil {
+		return err
+	}
+
+	result, err := stmt.Exec(boulder.FeltLikeDifficulty.Id, boulder.Id)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = result.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	stmt2, err := database.Prepare("UPDATE boulder_actual_difficulty Set DifficultyId = ? Where BoulderId = ?;")
+
+	if err != nil {
+		return err
+	}
+
+	result2, err := stmt2.Exec(boulder.ScrewedDifficulty.Id, boulder.Id)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = result2.RowsAffected()
+
+	return err
+}
+
 func addStyles(boulderId uuid.UUID, styles []models.Style, db *sql.DB) error {
 
 	for _, style := range styles {

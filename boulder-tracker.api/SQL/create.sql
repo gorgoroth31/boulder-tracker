@@ -30,9 +30,9 @@ create table sessions(
 
 create table boulders(
     Id char(36),
-    attempts int,
-    sessionsTried int,
-    exhausting boolean,
+    Attempts int,
+    SessionsTried int,
+    Exhausting boolean,
     SessionId char(36),
     PRIMARY KEY (Id),
     FOREIGN KEY (SessionId) REFERENCES sessions(Id) ON DELETE CASCADE
@@ -40,37 +40,37 @@ create table boulders(
 
 create table difficulties (
     Id char(36),
-    alias varchar(255),
-    relativeLevel int,
+    Alias varchar(255),
+    RelativeLevel int,
     PRIMARY KEY (Id)
 );
 
 create table styles(
     Id char(36),
-    alias varchar(255),
+    Alias varchar(255),
     PRIMARY KEY (Id)
 );
 
 create table boulder_styles(
-    boulderId char(36),
-    styleId char(36),
-    PRIMARY KEY(boulderId, styleId),
-    FOREIGN KEY (boulderId) REFERENCES boulders(Id) ON DELETE CASCADE,
-    FOREIGN KEY (styleId) REFERENCES styles(Id)
+    BoulderId char(36),
+    StyleId char(36),
+    PRIMARY KEY(BoulderId, StyleId),
+    FOREIGN KEY (BoulderId) REFERENCES boulders(Id) ON DELETE CASCADE,
+    FOREIGN KEY (StyleId) REFERENCES styles(Id)
 );
 
 create table boulder_feltlike_difficulty(
-    boulderId char(36),
-    difficultyId char(36),
-    PRIMARY KEY (boulderId, difficultyId),
-    FOREIGN KEY (boulderId) REFERENCES boulders(Id) ON DELETE CASCADE,
-    FOREIGN KEY (difficultyId) REFERENCES difficulties(Id)
+    BoulderId char(36),
+    DifficultyId char(36),
+    PRIMARY KEY (BoulderId, DifficultyId),
+    FOREIGN KEY (BoulderId) REFERENCES boulders(Id) ON DELETE CASCADE,
+    FOREIGN KEY (DifficultyId) REFERENCES difficulties(Id)
 );
 
 create table boulder_actual_difficulty(
-    boulderId char(36),
-    difficultyId char(36),
-    PRIMARY KEY (boulderId, difficultyId),
-    FOREIGN Key (boulderId) REFERENCES boulders(Id) ON DELETE CASCADE,
-    FOREIGN Key (difficultyId) REFERENCES difficulties(Id)
+    BoulderId char(36),
+    DifficultyId char(36),
+    PRIMARY KEY (BoulderId, DifficultyId),
+    FOREIGN Key (BoulderId) REFERENCES boulders(Id) ON DELETE CASCADE,
+    FOREIGN Key (DifficultyId) REFERENCES difficulties(Id)
 );

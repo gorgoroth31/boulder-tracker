@@ -7,7 +7,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/db"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
-	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/repository/boulderrepository"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/services/boulderservice"
 )
 
@@ -59,7 +58,7 @@ func GetLiveOrInProgressSessionForUser(userId uuid.UUID) (*models.Session, error
 	}
 
 	// fill in rest of fields
-	routes, err := boulderrepository.GetBouldersForSessionId(session.Id)
+	routes, err := boulderservice.GetBouldersForSessionId(session.Id)
 
 	if err != nil {
 		return nil, err
@@ -68,6 +67,42 @@ func GetLiveOrInProgressSessionForUser(userId uuid.UUID) (*models.Session, error
 	session.RoutesSolved = *routes
 
 	return &session, nil
+}
+
+func Update(session *models.Session) error {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	stmt, err := database.Prepare("UPDATE sessions SET StartTime = ?, EndTime = ?, BoulderedSolo = ? WHERE Id = ?;")
+
+	if err != nil {
+		return err
+	}
+
+	result, err := stmt.Exec(session.StartTime, session.EndTime, session.BoulderedSolo, session.Id)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = result.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	for _, boulder := range session.RoutesSolved {
+		err := boulderservice.Update(&boulder)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func Add(session *models.Session) error {
@@ -140,35 +175,4 @@ func Delete(sessionId uuid.UUID) error {
 	}
 
 	return nil
-}
-
-func GetAllSessionsSimple() (*[]models.Session, error) {
-	database, err := db.CreateDatabase()
-
-	if err != nil {
-		fmt.Println("database connection failed")
-	}
-	defer database.Close()
-
-	rows, err := database.Query("SELECT Id, StartTime, EndTime, SessionState FROM sessions;")
-
-	if err != nil {
-		return nil, err
-	}
-
-	var sessions []models.Session
-
-	for rows.Next() {
-		var diff models.Session
-		if err := rows.Scan(&diff.Id, &diff.StartTime, &diff.EndTime, &diff.SessionState); err != nil {
-			return &sessions, err
-		}
-		sessions = append(sessions, diff)
-	}
-
-	if err = rows.Err(); err != nil {
-		return &sessions, err
-	}
-
-	return &sessions, nil
 }

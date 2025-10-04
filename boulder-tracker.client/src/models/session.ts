@@ -8,4 +8,5 @@ export class Session {
     routesSolved: Boulder[];
     isDeleted: boolean;
     userId: string
+    sessionState: SessionState;
 }

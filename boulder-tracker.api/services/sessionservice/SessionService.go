@@ -37,6 +37,10 @@ func GetOrCreateInProgressSessionForUser(userId uuid.UUID) (*models.Session, err
 	return sessionrepository.GetLiveOrInProgressSessionForUser(userId)
 }
 
+func Update(session *models.Session) error {
+	return sessionrepository.Update(session)
+}
+
 func AddSession(session *models.Session) error {
 	err := sessionrepository.Add(session)
 	if err != nil {
@@ -53,20 +57,4 @@ func Delete(sessionId uuid.UUID) error {
 		return err
 	}
 	return nil
-}
-
-func GetAllSessionsSimple() *[]models.SessionDto {
-	sessions, err := sessionrepository.GetAllSessionsSimple()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	sessionsDTO := []models.SessionDto{}
-
-	for _, session := range *sessions {
-		sessionsDTO = append(sessionsDTO, *session.ToSessionDTO())
-	}
-
-	return &sessionsDTO
 }
