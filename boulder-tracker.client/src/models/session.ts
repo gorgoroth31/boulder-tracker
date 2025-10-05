@@ -1,9 +1,9 @@
 import type { Boulder } from "./boulder";
-import type { DateRange } from "./daterange";
 
 export interface Session {
     id: string;
-    visitTime: DateRange;
+    startTime: Date,
+    endTime: Date,
     boulderedSolo: boolean;
     routesSolved: Boulder[];
     isDeleted: boolean;

@@ -47,4 +47,12 @@ func UpdateSession(w http.ResponseWriter, r *http.Request) {
 	sessionEntity := sessionDto.ToSessionEntity()
 
 	err = sessionservice.Update(sessionEntity)
+
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(500)
+		return
+	}
+
+	w.WriteHeader(204)
 }

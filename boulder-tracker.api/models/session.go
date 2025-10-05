@@ -20,7 +20,8 @@ type Session struct {
 
 type SessionDto struct {
 	Id            uuid.UUID                 `json:"id"`
-	VisitTime     DateRangeDto              `json:"visitTime"`
+	StartTime     time.Time                 `json:"startTime"`
+	EndTime       time.Time                 `json:"endTime"`
 	BoulderedSolo bool                      `json:"boulderedSolo"`
 	RoutesSolved  []BoulderDto              `json:"routesSolved"`
 	SessionState  sessionState.SessionState `json:"sessionState"`
@@ -34,17 +35,15 @@ func (session *Session) ToSessionDTO() *SessionDto {
 		boulderRoutes = append(boulderRoutes, *boulder.ToBoulderDTO())
 	}
 
-	visitTime := &DateRangeDto{
-		From: session.StartTime,
-		To:   session.EndTime,
-	}
-
 	return &SessionDto{
 		Id:            session.Id,
-		VisitTime:     *visitTime,
+		StartTime:     session.StartTime,
+		EndTime:       session.EndTime,
 		BoulderedSolo: session.BoulderedSolo,
 		RoutesSolved:  boulderRoutes,
+		IsDeleted:     session.IsDeleted,
 		SessionState:  session.SessionState,
+		UserId:        session.UserId,
 	}
 }
 
@@ -56,8 +55,8 @@ func (session *SessionDto) ToSessionEntity() *Session {
 
 	return &Session{
 		Id:            session.Id,
-		StartTime:     session.VisitTime.From,
-		EndTime:       session.VisitTime.To,
+		StartTime:     session.StartTime,
+		EndTime:       session.EndTime,
 		BoulderedSolo: session.BoulderedSolo,
 		RoutesSolved:  boulderRoutes,
 		SessionState:  session.SessionState,

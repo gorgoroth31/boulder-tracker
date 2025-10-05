@@ -7,3 +7,9 @@ export async function getCurrentInProgressSession() : Promise<AxiosResponse<Sess
         return response
     });
 }
+
+export async function updateSession(session : Session) : Promise<AxiosResponse<Session>> {
+    return await instance.put("/session", session).then(response => {
+        return response
+    })
+}

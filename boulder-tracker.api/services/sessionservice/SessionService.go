@@ -3,6 +3,7 @@ package sessionservice
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/google/uuid"
 	SessionState "github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/enums"
@@ -26,7 +27,7 @@ func GetOrCreateInProgressSessionForUser(userId uuid.UUID) (*models.Session, err
 		return nil, err
 	}
 
-	newSession := models.Session{SessionState: SessionState.InProgress, UserId: userId, IsDeleted: false}
+	newSession := models.Session{SessionState: SessionState.InProgress, UserId: userId, IsDeleted: false, StartTime: time.Now().Add(-300), EndTime: time.Now()}
 
 	AddSession(&newSession)
 

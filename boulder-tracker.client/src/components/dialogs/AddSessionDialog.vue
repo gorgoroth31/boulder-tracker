@@ -36,8 +36,6 @@
 <script setup lang="ts">
 
 import { computed, onMounted, Ref, ref } from "vue";
-import { Session } from "./../../models/session"
-import { DateRange } from "../../models/daterange";
 
 import { useDisplay } from 'vuetify'
 
@@ -69,7 +67,6 @@ const currentStep: Ref<number> = ref(1);
 const maxSteps: number = 4;
 
 onMounted(() => {
-    session.value.visitTime = new DateRange
     if (mobile.value) {
 
     }
