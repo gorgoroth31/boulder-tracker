@@ -1,8 +1,8 @@
 ﻿<template>
   <v-progress-circular v-if="isLoading"></v-progress-circular>
   <v-form v-else>
-    <v-container>
-      <v-row>
+    <v-container class="d-flex flex-column gap-1rem">
+       <v-row class="d-flex flex-column">
         <v-date-input label="Wann warst du bouldern?"
                       :max="new Date()"
                       first-day-of-week="1"
@@ -12,12 +12,11 @@
                       autocomplete="off"
                       v-model="sessionDate">
         </v-date-input>
+        <time-picker-dialog label="Von:" :dateTime="session.startTime"></time-picker-dialog>
+        <time-picker-dialog label="Bis:" :dateTime="session.endTime"></time-picker-dialog>
       </v-row>
       <v-row>
-        <time-picker-dialog label="Von:" :dateTime="session.startTime"></time-picker-dialog>
-        <v-spacer></v-spacer>
-        <time-picker-dialog label="Bis:" :dateTime="session.endTime"></time-picker-dialog>
-        <v-spacer></v-spacer>
+        <v-checkbox v-model="session.boulderedSolo" color="primary" label="Warst du alleine bouldern?"></v-checkbox>
       </v-row>
       <v-row>
         <v-btn @click="save">Speichern</v-btn>
