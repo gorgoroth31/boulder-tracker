@@ -3,14 +3,15 @@
     <template v-slot:activator="{ props: activatorProps }">
       <div class="d-flex flex-column">
         <v-label>{{ label }}</v-label>
-        <v-btn v-bind="activatorProps">
-          {{ dateTimeRef.toTimeString().substring(0,5) }}
+        <v-btn v-bind="activatorProps" @click="onOpenDialog">
+          {{ props.dateTime.toTimeString().substring(0,5) }}
         </v-btn>
       </div>
     </template>
     <v-time-picker title="" format="24hr" v-model="dateTimeRef">
       <template v-slot:actions>
-        <v-btn @click="open = false">Schließen</v-btn>
+        <v-btn @click="closeWithoutSend">Abbrechen</v-btn>
+        <v-btn @click="submit">Ok</v-btn>
       </template>
     </v-time-picker>
   </v-dialog>
@@ -39,15 +40,34 @@ watch(dateTimeRef, (val) => {
     hour.value = Number(newVal.substring(0, 2))
     minute.value = Number(newVal.substring(3, 5))
     
-    props.dateTime.setHours(hour.value, minute.value)
-    
-    dateTimeRef.value = props.dateTime;
+    dateTimeRef.value = new Date();
+    dateTimeRef.value.setHours(hour.value, minute.value)
   }
 })
 
 onMounted(() => {
-  dateTimeRef.value = props.dateTime;
+  resetDialog();
+})
+
+function resetDialog() {
   hour.value = props.dateTime.getHours()
   minute.value = props.dateTime.getMinutes()
-})
+  dateTimeRef.value = new Date();
+  dateTimeRef.value.setHours(hour.value, minute.value)
+}
+
+function onOpenDialog() {
+  resetDialog();
+}
+
+function closeWithoutSend() {
+  open.value = false;
+}
+
+function submit() {
+  props.dateTime.setHours(hour.value, minute.value)
+  closeWithoutSend();
+}
+
+
 </script>
