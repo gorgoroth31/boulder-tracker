@@ -2,7 +2,7 @@
   <v-progress-circular v-if="isLoading"></v-progress-circular>
   <v-form v-else>
     <v-container class="d-flex flex-column gap-1rem">
-       <v-row class="d-flex flex-column">
+      <v-row class="d-flex flex-column">
         <v-date-input label="Wann warst du bouldern?"
                       :max="new Date()"
                       first-day-of-week="1"
@@ -19,7 +19,23 @@
         <v-checkbox v-model="session.boulderedSolo" color="primary" label="Warst du alleine bouldern?"></v-checkbox>
       </v-row>
       <v-row>
-        <v-btn @click="save">Speichern</v-btn>
+        <v-btn @click="save" class="pe-0">
+          Speichern
+          <v-btn
+              class="ml-3"
+              @click.stop
+              id="menu-activator">
+            <v-icon>mdi-chevron-down</v-icon>
+          </v-btn>
+
+          <v-menu activator="#menu-activator">
+            <v-list>
+              <v-list-item>
+                <v-list-item-title>Speichern & Abschließen</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-btn>
       </v-row>
     </v-container>
   </v-form>
