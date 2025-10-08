@@ -15,9 +15,12 @@
         <time-picker-dialog label="Von:" :dateTime="session.startTime"></time-picker-dialog>
         <time-picker-dialog label="Bis:" :dateTime="session.endTime"></time-picker-dialog>
       </v-row>
-      <v-row>
+      <v-row class="d-flex flex-column gap-1rem">
         <div class="text-h5">Routen</div>
         <!--First display all boulder routes as cards, then a card with a +, when clicking +, dialog opens to add boulder-->
+        <BoulderRouteCard v-for="boulder in session.routesSolved" :route="boulder"></BoulderRouteCard>
+        
+        <AddBoulderRouteCardDialog></AddBoulderRouteCardDialog>
       </v-row>
       <v-row class="d-flex justify-end">
         <v-btn @click="save" class="border-right-0">Speichern</v-btn>
@@ -48,8 +51,10 @@ import {getCurrentInProgressSession, updateSession} from "@/api/session.api";
 import {Session} from "@/models/session";
 import TimePickerDialog from "@/components/dialogs/TimePickerDialog.vue";
 import BoulderRouteCard from "@/components/BoulderRouteCard.vue";
+import AddBoulderRouteCardDialog from "@/components/dialogs/AddBoulderRouteDialog.vue";
 
 const isLoading: Ref<boolean> = ref(true);
+const isAddBoulderDialogOpen: Ref<boolean> = ref(false);
 
 const session: Ref<Session> = ref<Session>({});
 const sessionDate: Ref<Date> = ref(new Date());
@@ -78,6 +83,10 @@ onMounted(() => {
     isLoading.value = false;
   })
 })
+
+function openAddBoulderRouteDialog() {
+  isAddBoulderDialogOpen.value = true;
+}
 
 function submit() {
   alert("implement submit with confirmation dialog")
