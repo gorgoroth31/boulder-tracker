@@ -19,23 +19,26 @@
         <v-checkbox v-model="session.boulderedSolo" color="primary" label="Warst du alleine bouldern?"></v-checkbox>
       </v-row>
       <v-row>
-        <v-btn @click="save" class="pe-0">
-          Speichern
-          <v-btn
-              class="ml-3"
-              @click.stop
-              id="menu-activator">
-            <v-icon>mdi-chevron-down</v-icon>
-          </v-btn>
-
-          <v-menu activator="#menu-activator">
-            <v-list>
-              <v-list-item>
-                <v-list-item-title>Speichern & Abschließen</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+        <div class="text-h5">Routen</div>
+        <!--First display all boulder routes as cards, then a card with a +, when clicking +, dialog opens to add boulder-->
+      </v-row>
+      <v-row class="d-flex justify-end">
+        <v-btn @click="save" class="border-right-0">Speichern</v-btn>
+        <v-btn
+            class="border-left-0"
+            id="menu-activator">
+          <v-icon>mdi-chevron-down</v-icon>
         </v-btn>
+
+        <v-menu activator="#menu-activator">
+          <v-list class="pa-0">
+            <v-list-item class="pa-0">
+              <v-list-item-title class="pa-0">
+                <v-btn @click="submit" class="border-right-0">Speichern & Abschließen</v-btn>
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-row>
     </v-container>
   </v-form>
@@ -47,6 +50,7 @@ import mainPageUtils from "./../utils/mainPageUtils";
 import {getCurrentInProgressSession, updateSession} from "@/api/session.api";
 import {Session} from "@/models/session";
 import TimePickerDialog from "@/components/dialogs/TimePickerDialog.vue";
+import BoulderRouteCard from "@/components/BoulderRouteCard.vue";
 
 const isLoading: Ref<boolean> = ref(true);
 
@@ -77,6 +81,10 @@ onMounted(() => {
     isLoading.value = false;
   })
 })
+
+function submit() {
+  alert("implement submit with confirmation dialog")
+}
 
 function save() {
   updateSession(session.value)
