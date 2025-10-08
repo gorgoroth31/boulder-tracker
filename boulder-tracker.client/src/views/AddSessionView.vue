@@ -16,9 +16,6 @@
         <time-picker-dialog label="Bis:" :dateTime="session.endTime"></time-picker-dialog>
       </v-row>
       <v-row>
-        <v-checkbox v-model="session.boulderedSolo" color="primary" label="Warst du alleine bouldern?"></v-checkbox>
-      </v-row>
-      <v-row>
         <div class="text-h5">Routen</div>
         <!--First display all boulder routes as cards, then a card with a +, when clicking +, dialog opens to add boulder-->
       </v-row>

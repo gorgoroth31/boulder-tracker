@@ -33,7 +33,6 @@ create table sessions(
     Id char(36),
     StartTime datetime,
     EndTime datetime,
-    BoulderedSolo boolean,
     SessionState int,
     IsDeleted boolean,
     UserId char(36),
