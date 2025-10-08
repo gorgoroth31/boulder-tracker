@@ -104,7 +104,11 @@ func GetBouldersForSessionId(sessionId uuid.UUID) (*[]models.Boulder, error) {
 	return &routes, nil
 }
 
-func Update(boulder *models.Boulder) error {
+func AddOrUpdate(boulder *models.Boulder) error {
+	if boulder.Id == uuid.Nil {
+		return addBoulder(boulder)
+	}
+
 	database, err := db.CreateDatabase()
 
 	if err != nil {
@@ -112,13 +116,13 @@ func Update(boulder *models.Boulder) error {
 	}
 	defer database.Close()
 
-	stmt, err := database.Prepare("UPDATE boulders SET Attempts = ?, SessionsTried = ?, Exhausting = ?, FeltLikeDifficultyId = ?, ScrewedDifficultyId WHERE Id = ?;")
+	stmt, err := database.Prepare("UPDATE boulders SET Attempts = ?, SessionsTried = ?, Exhausting = ?, FeltLikeDifficultyId = ?, ScrewedDifficultyId = ? WHERE Id = ?;")
 
 	if err != nil {
 		return err
 	}
 
-	result, err := stmt.Exec(boulder.Attempts, boulder.SessionsTried, boulder.Exhausting, boulder.FeltLikeDifficultyId, boulder.ScrewedDifficultyId, boulder.Id)
+	result, err := stmt.Exec(boulder.Attempts, boulder.SessionsTried, boulder.Exhausting, boulder.FeltLikeDifficulty.Id, boulder.ScrewedDifficulty.Id, boulder.Id)
 
 	if err != nil {
 		return err
@@ -133,6 +137,38 @@ func Update(boulder *models.Boulder) error {
 	err = updateStylesForBoulder(boulder)
 
 	return err
+}
+
+func addBoulder(boulder *models.Boulder) error {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	stmt, err := database.Prepare("INSERT INTO boulders (Id, Attempts, SessionsTried, Exhausting, Likes, FeltLikeDifficultyId, ScrewedDifficultyId, SessionId) VALUES (?, ?, ?, ?, ?, ?, ?, ?);")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	boulderId := uuid.New()
+
+	result, err := stmt.Exec(boulderId, boulder.Attempts, boulder.SessionsTried, boulder.Exhausting, boulder.Like, boulder.FeltLikeDifficulty.Id, boulder.ScrewedDifficulty.Id, boulder.SessionId)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = result.RowsAffected()
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func updateStylesForBoulder(boulder *models.Boulder) error {

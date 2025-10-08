@@ -17,10 +17,9 @@
       </v-row>
       <v-row class="d-flex flex-column gap-1rem">
         <div class="text-h5">Routen</div>
-        <!--First display all boulder routes as cards, then a card with a +, when clicking +, dialog opens to add boulder-->
-        <BoulderRouteCard v-for="boulder in session.routesSolved" :route="boulder"></BoulderRouteCard>
+        <BoulderRouteCard v-for="boulder in session.routesSolved" :boulderRoute="boulder"></BoulderRouteCard>
         
-        <AddBoulderRouteCardDialog></AddBoulderRouteCardDialog>
+        <AddBoulderRouteCardDialog @submit="handleAddBoulderRouteCallback"></AddBoulderRouteCardDialog>
       </v-row>
       <v-row class="d-flex justify-end">
         <v-btn @click="save" class="border-right-0">Speichern</v-btn>
@@ -52,9 +51,9 @@ import {Session} from "@/models/session";
 import TimePickerDialog from "@/components/dialogs/TimePickerDialog.vue";
 import BoulderRouteCard from "@/components/BoulderRouteCard.vue";
 import AddBoulderRouteCardDialog from "@/components/dialogs/AddBoulderRouteDialog.vue";
+import {Boulder} from "@/models/boulder";
 
 const isLoading: Ref<boolean> = ref(true);
-const isAddBoulderDialogOpen: Ref<boolean> = ref(false);
 
 const session: Ref<Session> = ref<Session>({});
 const sessionDate: Ref<Date> = ref(new Date());
@@ -84,8 +83,14 @@ onMounted(() => {
   })
 })
 
-function openAddBoulderRouteDialog() {
-  isAddBoulderDialogOpen.value = true;
+function handleAddBoulderRouteCallback(success: boolean, routeToAdd: Boulder) {
+  if (!success) {
+    return;
+  }
+  
+  routeToAdd.sessionId = session.value.id;
+  session.value.routesSolved.push(routeToAdd);
+  save()
 }
 
 function submit() {

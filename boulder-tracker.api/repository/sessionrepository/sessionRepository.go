@@ -76,7 +76,7 @@ func Update(session *models.Session) error {
 	}
 	defer database.Close()
 
-	stmt, err := database.Prepare("UPDATE sessions SET StartTime = ?, EndTime = ?, WHERE Id = ?;")
+	stmt, err := database.Prepare("UPDATE sessions SET StartTime = ?, EndTime = ? WHERE Id = ?;")
 
 	if err != nil {
 		return err
@@ -95,7 +95,7 @@ func Update(session *models.Session) error {
 	}
 
 	for _, boulder := range session.RoutesSolved {
-		err := boulderservice.Update(&boulder)
+		err := boulderservice.AddOrUpdate(&boulder)
 		if err != nil {
 			return err
 		}
