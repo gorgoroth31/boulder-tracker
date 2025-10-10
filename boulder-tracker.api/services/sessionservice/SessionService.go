@@ -38,8 +38,13 @@ func GetOrCreateInProgressSessionForUser(userId uuid.UUID) (*models.Session, err
 	return sessionrepository.GetLiveOrInProgressSessionForUser(userId)
 }
 
-func Update(session *models.Session) error {
-	return sessionrepository.Update(session)
+func Update(session *models.Session) (*models.Session, error) {
+	err := sessionrepository.Update(session)
+
+	if err != nil {
+		return nil, err
+	}
+	return sessionrepository.GetSessionById(session.Id)
 }
 
 func AddSession(session *models.Session) error {

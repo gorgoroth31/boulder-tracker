@@ -44,9 +44,11 @@ func UpdateSession(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	// TODO restrict users, who are not the owner from updating
+
 	sessionEntity := sessionDto.ToSessionEntity()
 
-	err = sessionservice.Update(sessionEntity)
+	session, err := sessionservice.Update(sessionEntity)
 
 	if err != nil {
 		fmt.Println(err)
@@ -54,5 +56,7 @@ func UpdateSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(204)
+	encoder := json.NewEncoder(w)
+
+	encoder.Encode(session.ToSessionDTO())
 }

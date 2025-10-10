@@ -6,6 +6,7 @@ import (
 	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
 	"github.com/auth0/go-jwt-middleware/v2/validator"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/app/middleware"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/controller/bouldercontroller"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/controller/difficultycontroller"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/controller/sessioncontroller"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/controller/stylecontroller"
@@ -19,6 +20,7 @@ func SetupController(router *mux.Router) {
 	setupSessionController(router)
 	setupStyleController(router)
 	setupDifficultyController(router)
+	setupBoulderController(router)
 }
 
 func setupUserController(router *mux.Router) {
@@ -41,6 +43,10 @@ func setupStyleController(router *mux.Router) {
 func setupDifficultyController(router *mux.Router) {
 	router.Handle("/difficulty", middleware.EnsureValidToken()(baseHandlerFunc(difficultycontroller.Add, ""))).Methods("POST")
 	router.Handle("/difficulty", middleware.EnsureValidToken()(baseHandlerFunc(difficultycontroller.GetAll, ""))).Methods("GET")
+}
+
+func setupBoulderController(router *mux.Router) {
+	router.Handle("/boulder/{id}", middleware.EnsureValidToken()(baseHandlerFunc(bouldercontroller.DeleteById, ""))).Methods("DELETE")
 }
 
 func baseHandlerFunc(next func(http.ResponseWriter, *http.Request), scope string) http.HandlerFunc {

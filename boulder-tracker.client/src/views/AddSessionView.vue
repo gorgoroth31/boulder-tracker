@@ -17,8 +17,13 @@
       </v-row>
       <v-row class="d-flex flex-column gap-1rem">
         <div class="text-h5">Routen</div>
-        <BoulderRouteCard v-for="boulder in session.routesSolved" :boulderRoute="boulder"></BoulderRouteCard>
-        
+        <v-expansion-panels>
+          <BoulderRouteCard v-for="boulder in session.routesSolved"
+                            :boulderRoute="boulder"
+                            @delete="handleBoulderDelete">
+          </BoulderRouteCard>
+        </v-expansion-panels>
+
         <AddBoulderRouteCardDialog @submit="handleAddBoulderRouteCallback"></AddBoulderRouteCardDialog>
       </v-row>
       <v-row class="d-flex justify-end">
@@ -52,6 +57,8 @@ import TimePickerDialog from "@/components/dialogs/TimePickerDialog.vue";
 import BoulderRouteCard from "@/components/BoulderRouteCard.vue";
 import AddBoulderRouteCardDialog from "@/components/dialogs/AddBoulderRouteDialog.vue";
 import {Boulder} from "@/models/boulder";
+import {removeItem} from "@/utils/arrayUtils";
+import {deleteBoulder} from "@/api/boulder.api";
 
 const isLoading: Ref<boolean> = ref(true);
 
@@ -83,11 +90,25 @@ onMounted(() => {
   })
 })
 
+function handleBoulderDelete(route: Boulder) {
+  // call api to delete boulder by id, then remove in frontend, if success
+  if (route.id === undefined) {
+    session.value.routesSolved = removeItem<Boulder>(session.value.routesSolved, route)
+    return
+  }
+
+  deleteBoulder(route.id).then(value => {
+    if (value.status === 204) {
+      session.value.routesSolved = removeItem<Boulder>(session.value.routesSolved, route)
+    }
+  })
+}
+
 function handleAddBoulderRouteCallback(success: boolean, routeToAdd: Boulder) {
   if (!success) {
     return;
   }
-  
+
   routeToAdd.sessionId = session.value.id;
   session.value.routesSolved.push(routeToAdd);
   save()
@@ -98,6 +119,8 @@ function submit() {
 }
 
 function save() {
-  updateSession(session.value)
+  updateSession(session.value).then(value => {
+    session.value = value.data;
+  })
 }
 </script>

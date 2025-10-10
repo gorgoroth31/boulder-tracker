@@ -139,6 +139,27 @@ func AddOrUpdate(boulder *models.Boulder) error {
 	return err
 }
 
+func DeleteById(boulderId uuid.UUID) error {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+		return err
+	}
+	defer database.Close()
+
+	stmt, err := database.Prepare("DELETE FROM boulders WHERE Id = ?;")
+
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(boulderId)
+
+	return err
+}
+
 func addBoulder(boulder *models.Boulder) error {
 	database, err := db.CreateDatabase()
 

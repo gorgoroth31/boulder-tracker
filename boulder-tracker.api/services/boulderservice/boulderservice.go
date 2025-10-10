@@ -24,3 +24,7 @@ func GetBouldersForSessionId(sessionId uuid.UUID) (*[]models.Boulder, error) {
 func AddOrUpdate(boulder *models.Boulder) error {
 	return boulderrepository.AddOrUpdate(boulder)
 }
+
+func DeleteById(boulderId uuid.UUID) error {
+	return boulderrepository.DeleteById(boulderId)
+}
