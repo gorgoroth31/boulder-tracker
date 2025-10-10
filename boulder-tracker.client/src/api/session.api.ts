@@ -19,3 +19,9 @@ export async function submitCurrentSession() : Promise<AxiosResponse> {
         return response
     })
 }
+
+export async function getLatestSessions() : Promise<AxiosResponse<Session[]>> {
+    return await instance.get("/session/getLatest").then(response => {
+        return response
+    })
+}

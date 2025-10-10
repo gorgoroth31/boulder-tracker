@@ -69,6 +69,46 @@ func GetLiveOrInProgressSessionForUser(userId uuid.UUID) (*models.Session, error
 	return &session, nil
 }
 
+func GetLatestForUser(userId uuid.UUID, count int) (*[]models.Session, error) {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	rows, err := database.Query("SELECT Id, StartTime, EndTime, SessionState FROM sessions WHERE UserId = ? AND SessionState = ? ORDER BY StartTime DESC LIMIT ?;", userId, SessionState.Finished, count)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var sessions []models.Session
+
+	for rows.Next() {
+		var diff models.Session
+		if err := rows.Scan(&diff.Id, &diff.StartTime, &diff.EndTime, &diff.SessionState); err != nil {
+			return &sessions, err
+		}
+
+		routes, err := boulderservice.GetBouldersForSessionId(diff.Id)
+
+		if err != nil {
+			return nil, err
+		}
+
+		diff.RoutesSolved = *routes
+
+		sessions = append(sessions, diff)
+	}
+
+	if err = rows.Err(); err != nil {
+		return &sessions, err
+	}
+
+	return &sessions, nil
+}
+
 func Update(session *models.Session) error {
 	database, err := db.CreateDatabase()
 

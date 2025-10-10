@@ -1,5 +1,5 @@
 ﻿<template>
-  <v-progress-circular v-if="isLoading"></v-progress-circular>
+  <v-progress-linear indeterminate v-if="isLoading"></v-progress-linear>
   <v-form v-else>
     <v-container class="d-flex flex-column gap-1rem">
       <v-row class="d-flex flex-column">
@@ -115,7 +115,8 @@ function handleAddBoulderRouteCallback(success: boolean, routeToAdd: Boulder) {
   save()
 }
 
-function submit() {
+async function submit() {
+  await save()
   submitCurrentSession().then(value => {
     if (value.status === 204) {
       router.push("/")
@@ -123,8 +124,8 @@ function submit() {
   })
 }
 
-function save() {
-  updateSession(session.value).then(value => {
+async function save() {
+  await updateSession(session.value).then(value => {
     session.value = value.data;
   })
 }

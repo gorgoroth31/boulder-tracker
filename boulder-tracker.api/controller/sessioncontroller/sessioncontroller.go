@@ -36,6 +36,28 @@ func GetCurrentSession(w http.ResponseWriter, r *http.Request) {
 	encoder.Encode(session.ToSessionDTO())
 }
 
+func GetLatest(w http.ResponseWriter, r *http.Request) {
+	principalId := utils.GetPrincipalId(r)
+
+	sessions, err := sessionservice.GetLatestForUser(principalId, 5)
+
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(500)
+		return
+	}
+
+	var sessionDtos []models.SessionDto
+
+	for _, v := range *sessions {
+		sessionDtos = append(sessionDtos, *v.ToSessionDTO())
+	}
+
+	encoder := json.NewEncoder(w)
+
+	encoder.Encode(sessionDtos)
+}
+
 func UpdateSession(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var sessionDto models.SessionDto

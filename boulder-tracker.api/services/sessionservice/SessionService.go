@@ -39,6 +39,16 @@ func GetOrCreateInProgressSessionForUser(userId uuid.UUID) (*models.Session, err
 	return sessionrepository.GetLiveOrInProgressSessionForUser(userId)
 }
 
+func GetLatestForUser(principalId string, count int) (*[]models.Session, error) {
+	user, err := userservice.GetByPrincipal(principalId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return sessionrepository.GetLatestForUser(user.Id, count)
+}
+
 func Update(session *models.Session) (*models.Session, error) {
 	err := sessionrepository.Update(session)
 
