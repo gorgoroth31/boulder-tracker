@@ -9,6 +9,7 @@ import (
 	SessionState "github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/enums"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/repository/sessionrepository"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/services/userservice"
 )
 
 func GetOrCreateInProgressSessionForUser(userId uuid.UUID) (*models.Session, error) {
@@ -63,4 +64,24 @@ func Delete(sessionId uuid.UUID) error {
 		return err
 	}
 	return nil
+}
+
+func SubmitCurrentSessionForUser(principalId string) error {
+	user, err := userservice.GetByPrincipal(principalId)
+
+	if err != nil {
+		return err
+	}
+
+	doesSessionExist, err := sessionrepository.ExistsLiveOrInProgressSessionForUser(user.Id)
+
+	if err != nil {
+		return err
+	}
+
+	if !doesSessionExist {
+		return nil
+	}
+
+	return sessionrepository.SubmitCurrentSessionForUserId(user.Id)
 }

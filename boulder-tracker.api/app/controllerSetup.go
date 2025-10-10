@@ -33,6 +33,7 @@ func setupUserController(router *mux.Router) {
 func setupSessionController(router *mux.Router) {
 	router.Handle("/session/currentLiveOrInProgress", middleware.EnsureValidToken()(baseHandlerFunc(sessioncontroller.GetCurrentSession, ""))).Methods("GET")
 	router.Handle("/session", middleware.EnsureValidToken()(baseHandlerFunc(sessioncontroller.UpdateSession, ""))).Methods("PUT")
+	router.Handle("/session/submitCurrent", middleware.EnsureValidToken()(baseHandlerFunc(sessioncontroller.SubmitCurrentSession, ""))).Methods("PUT")
 }
 
 func setupStyleController(router *mux.Router) {

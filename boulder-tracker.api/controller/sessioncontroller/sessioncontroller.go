@@ -10,6 +10,7 @@ import (
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/services/sessionservice"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/services/userservice"
+	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/utils"
 )
 
 func GetCurrentSession(w http.ResponseWriter, r *http.Request) {
@@ -59,4 +60,18 @@ func UpdateSession(w http.ResponseWriter, r *http.Request) {
 	encoder := json.NewEncoder(w)
 
 	encoder.Encode(session.ToSessionDTO())
+}
+
+func SubmitCurrentSession(w http.ResponseWriter, r *http.Request) {
+	principalId := utils.GetPrincipalId(r)
+
+	err := sessionservice.SubmitCurrentSessionForUser(principalId)
+
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(500)
+		return
+	}
+
+	w.WriteHeader(204)
 }

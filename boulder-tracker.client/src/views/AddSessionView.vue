@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import {onMounted, Ref, ref, watch} from "vue";
 import mainPageUtils from "./../utils/mainPageUtils";
-import {getCurrentInProgressSession, updateSession} from "@/api/session.api";
+import {getCurrentInProgressSession, submitCurrentSession, updateSession} from "@/api/session.api";
 import {Session} from "@/models/session";
 import TimePickerDialog from "@/components/dialogs/TimePickerDialog.vue";
 import BoulderRouteCard from "@/components/BoulderRouteCard.vue";
@@ -59,6 +59,7 @@ import AddBoulderRouteCardDialog from "@/components/dialogs/AddBoulderRouteDialo
 import {Boulder} from "@/models/boulder";
 import {removeItem} from "@/utils/arrayUtils";
 import {deleteBoulder} from "@/api/boulder.api";
+import router from "@/router";
 
 const isLoading: Ref<boolean> = ref(true);
 
@@ -115,7 +116,11 @@ function handleAddBoulderRouteCallback(success: boolean, routeToAdd: Boulder) {
 }
 
 function submit() {
-  alert("implement submit with confirmation dialog")
+  submitCurrentSession().then(value => {
+    if (value.status === 204) {
+      router.push("/")
+    }
+  })
 }
 
 function save() {

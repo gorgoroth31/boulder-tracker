@@ -13,3 +13,9 @@ export async function updateSession(session : Session) : Promise<AxiosResponse<S
         return response
     })
 }
+
+export async function submitCurrentSession() : Promise<AxiosResponse> {
+    return await instance.put("/session/submitCurrent").then(response => {
+        return response
+    })
+}

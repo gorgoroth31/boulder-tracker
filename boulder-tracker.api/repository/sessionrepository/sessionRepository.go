@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/db"
+	SessionState "github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/enums"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/services/boulderservice"
 )
@@ -207,4 +208,29 @@ func Delete(sessionId uuid.UUID) error {
 	}
 
 	return nil
+}
+
+func SubmitCurrentSessionForUserId(userId uuid.UUID) error {
+	database, err := db.CreateDatabase()
+
+	if err != nil {
+		fmt.Println("database connection failed")
+	}
+	defer database.Close()
+
+	stmt, err := database.Prepare("UPDATE sessions SET SessionState = ? WHERE UserId = ? AND SessionState IN (0,1);")
+
+	if err != nil {
+		return err
+	}
+
+	result, err := stmt.Exec(SessionState.Finished, userId)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = result.RowsAffected()
+
+	return err
 }
