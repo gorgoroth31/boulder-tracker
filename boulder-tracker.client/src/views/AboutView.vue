@@ -8,9 +8,10 @@
       <div class="text-body-1">das neue Schweizer Taschenmesser, um deine Bouldersessions auf ein neues Level zu heben!</div>
     </div>
 
+    <v-btn color="primary" v-if="!mainPageUtils.isLoggedIn.value" @click="login">Jetzt loslegen</v-btn>
+
     <AboutCarousel :slides="slides1"/>
 
-    <v-btn v-if="!mainPageUtils.isLoggedIn.value" @click="login">Jetzt loslegen</v-btn>
     <div>
       <div class="text-h5 text-primary">Schwierigkeitsskalen:</div>
       <div class="text-body-1">Aktuell wird nur die Schwierigkeitsskala der
