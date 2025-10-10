@@ -19,6 +19,10 @@
     gap: 1rem;
 }
 
+.gap-dot5rem {
+    gap: .5rem;
+}
+
 .link-underline-none {
     text-decoration: none;
 }

@@ -10,14 +10,30 @@
       <v-card-title>Route hinzufügen</v-card-title>
       <v-card-text class="d-flex flex-column gap-1rem">
         <v-row class="d-flex flex-column">
-          <v-select label="Geschraubte Schwierigkeit" v-model="boulder.screwedDifficulty" :items="allDifficulties" return-object
+          <v-select label="Geschraubte Schwierigkeit" v-model="boulder.screwedDifficulty" :items="allDifficulties"
+                    return-object
                     item-title="alias">
           </v-select>
         </v-row>
 
         <v-row class="d-flex flex-column">
-          <v-select label="Gefühlte Schwierigkeit" v-model="boulder.feltLikeDifficulty" :items="allDifficulties" return-object
+          <v-select label="Gefühlte Schwierigkeit" v-model="boulder.feltLikeDifficulty" :items="allDifficulties"
+                    return-object
                     item-title="alias">
+          </v-select>
+        </v-row>
+
+        <v-row class="d-flex flex-column">
+          <v-select
+              v-model="boulder.style"
+              :items="allStyles"
+              label="Styles auswählen"
+              return-object
+              item-title="alias"
+              multiple>
+            <template v-slot:selection="{ item, index }">
+              <v-chip :text="item.title"></v-chip>
+            </template>
           </v-select>
         </v-row>
 
@@ -43,7 +59,7 @@
 
         <v-row class="d-flex flex-column">
           <v-label>War die Route anstrengend?</v-label>
-          <v-checkbox-btn class="align-self-center" @click="boulder.exhausting"></v-checkbox-btn>
+          <v-checkbox-btn class="align-self-center" @click="boulder.exhausting = !boulder.exhausting"></v-checkbox-btn>
         </v-row>
 
         <v-row class="d-flex flex-column">
@@ -73,6 +89,8 @@ import {onMounted, ref, Ref} from "vue";
 import {Boulder} from "@/models/boulder";
 import {Difficulty} from "@/models/difficulty";
 import {getAllDifficulties} from "@/api/difficulty.api";
+import {Style} from "node:util";
+import {getAllStyles} from "@/api/styles.api";
 
 const isLoading: Ref<boolean> = ref(false);
 const isOpen: Ref<boolean> = ref(false);
@@ -80,6 +98,7 @@ const isOpen: Ref<boolean> = ref(false);
 const boulder: Ref<Boulder> = ref({});
 
 const allDifficulties: Ref<Difficulty[]> = ref([]);
+const allStyles: Ref<Style[]> = ref([]);
 
 const errorMessage: Ref<string> = ref("");
 
@@ -93,6 +112,10 @@ onMounted(() => {
     allDifficulties.value = result.data
     allDifficulties.value.sort((a: Difficulty, b: Difficulty) => a.relativeLevel - b.relativeLevel);
   })
+
+  getAllStyles().then(result => {
+    allStyles.value = result.data
+  })
   resetDialog();
 })
 
@@ -102,13 +125,14 @@ function resetDialog() {
     attempts: 1,
     sessionsTried: 1,
     like: false,
-     exhausting: false,
+    exhausting: false,
+    style: []
   }
   isLoading.value = false;
 }
 
 function handleCancel() {
-  emit('submit',false, null);
+  emit('submit', false, null);
   isOpen.value = false;
 }
 
@@ -126,7 +150,7 @@ function handleSubmit() {
   isOpen.value = false;
 }
 
-function checkBoulderValidation() : boolean {
+function checkBoulderValidation(): boolean {
   return boulder.value.feltLikeDifficulty !== undefined && boulder.value.screwedDifficulty !== undefined;
 }
 

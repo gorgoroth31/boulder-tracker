@@ -154,9 +154,9 @@ func addBoulder(boulder *models.Boulder) error {
 	}
 	defer stmt.Close()
 
-	boulderId := uuid.New()
+	boulder.Id = uuid.New()
 
-	result, err := stmt.Exec(boulderId, boulder.Attempts, boulder.SessionsTried, boulder.Exhausting, boulder.Like, boulder.FeltLikeDifficulty.Id, boulder.ScrewedDifficulty.Id, boulder.SessionId)
+	result, err := stmt.Exec(boulder.Id, boulder.Attempts, boulder.SessionsTried, boulder.Exhausting, boulder.Like, boulder.FeltLikeDifficulty.Id, boulder.ScrewedDifficulty.Id, boulder.SessionId)
 
 	if err != nil {
 		return err
@@ -168,7 +168,9 @@ func addBoulder(boulder *models.Boulder) error {
 		return err
 	}
 
-	return nil
+	err = updateStylesForBoulder(boulder)
+
+	return err
 }
 
 func updateStylesForBoulder(boulder *models.Boulder) error {

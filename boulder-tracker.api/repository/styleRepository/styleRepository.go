@@ -80,7 +80,7 @@ func GetAllByBoulderId(boulderId uuid.UUID) (*[]models.Style, error) {
 	}
 	defer database.Close()
 
-	rows, err := database.Query("SELECT Id, Alias FROM styles WHERE Id = ?;", boulderId)
+	rows, err := database.Query("SELECT Id, Alias FROM styles s inner join boulder_styles bs on s.Id = bs.StyleId WHERE bs.BoulderId = ?;", boulderId)
 
 	if err != nil {
 		return nil, err
