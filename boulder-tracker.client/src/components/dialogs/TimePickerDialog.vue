@@ -25,6 +25,10 @@ const props = defineProps<{
   label: string
 }>()
 
+const emit = defineEmits<{
+  (e: 'submit', success: boolean, hours: number, minutes: number): void
+}>()
+
 const open: Ref<boolean> = ref(false);
 
 const dateTimeRef: Ref<Date> = ref(new Date());
@@ -61,11 +65,12 @@ function onOpenDialog() {
 }
 
 function closeWithoutSend() {
+  emit('submit', false, 0, 0)
   open.value = false;
 }
 
 function submit() {
-  props.dateTime.setHours(hour.value, minute.value)
+  emit('submit', true, hour.value, minute.value)
   closeWithoutSend();
 }
 
