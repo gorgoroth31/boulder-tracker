@@ -14,6 +14,9 @@
         </v-date-input>
         <time-picker-dialog @submit="setNewStartTime" label="Von:" :dateTime="new Date(session.startTime)"></time-picker-dialog>
         <time-picker-dialog @submit="setNewEndTime" label="Bis:" :dateTime="new Date(session.endTime)"></time-picker-dialog>
+        <v-snackbar v-model="showEndtimeSnackbar" color="info" timeout="3000">
+          Bitte beachte, dass deine Endzeit nicht vor der Startzeit liegen kann
+        </v-snackbar>
       </v-row>
       <v-row class="d-flex flex-column gap-1rem">
         <div class="text-h5">Routen</div>
@@ -54,6 +57,7 @@ import {sleep} from "@/utils/otherUtils";
 const submitButtonRef = useTemplateRef("submit-btn")
 
 const isLoading: Ref<boolean> = ref(true);
+const showEndtimeSnackbar: Ref<boolean> = ref(false);
 
 const session: Ref<Session> = ref<Session>({});
 const sessionDate: Ref<Date> = ref(new Date());
@@ -114,6 +118,15 @@ function setNewEndTime(success: boolean, hours: number, minutes: number) {
   if (!success) {
     return;
   }
+  const endTimeBackup = new Date(session.value.endTime);
+  session.value.endTime.setHours(hours, minutes);
+  
+  if (session.value.endTime < session.value.startTime) {
+    showEndtimeSnackbar.value = true;
+    session.value.endTime = endTimeBackup;
+    return
+  }
+  
   session.value.endTime.setHours(hours, minutes);
   saveWithDebounce();
 }
