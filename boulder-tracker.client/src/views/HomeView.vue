@@ -1,10 +1,20 @@
 <template>
   <div v-if="isLoading" class="w-100 h-100 d-flex justify-center align-center">
-    <v-progress-linear indeterminate ></v-progress-linear>
+    <v-progress-linear indeterminate></v-progress-linear>
   </div>
   <div v-else>
-    <div class="text-h5">Letzte Sessions</div>
-    <SessionCard v-for="session in sessions" :session="session"></SessionCard>
+    <div v-if="sessions === null || sessions?.length === 0">
+      <v-card>
+        <v-card-text @click="router.push('sessions/add')" v-ripple class="bg-primary d-flex align-center justify-content-between">
+          <div>Sieht aus, als ob du noch keine Session abgespeichert hast! Klicke hier, um eine neue Session zu erstellen</div>
+          <div><v-icon>mdi-chevron-right</v-icon></div>
+        </v-card-text>
+      </v-card>
+    </div>
+    <div v-else>
+      <div class="text-h5">Letzte Sessions</div>
+      <SessionCard v-for="session in sessions" :session="session"></SessionCard>
+    </div>
   </div>
 </template>
 
@@ -16,6 +26,7 @@ import mainPageUtils from "./../utils/mainPageUtils";
 import {getLatestSessions} from "@/api/session.api";
 import {Session} from "node:inspector";
 import SessionCard from "@/components/SessionCard.vue";
+import router from "@/router";
 
 const user = ref<User | null>(null);
 const sessions = ref<Session[] | null>(null);
