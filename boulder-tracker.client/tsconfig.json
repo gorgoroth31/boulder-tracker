@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+        "baseUrl": ".", // Required for "paths" to work
+    "paths": {
+      "@/*": ["src/*"]
+    },
     "resolveJsonModule": true,
     "target": "esnext",
     "outDir": "./build",                              
