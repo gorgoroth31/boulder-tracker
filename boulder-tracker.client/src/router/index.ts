@@ -1,15 +1,15 @@
-import {createRouter, createWebHashHistory} from 'vue-router'
+import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import {isUserAuthenticated} from "../plugins/auth";
 import LogoutView from "../views/LogoutView.vue";
 import {existsUserByClaims} from "../api/api";
 import RegistrationView from "../views/RegistrationView.vue";
 import AddSessionView from "../views/AddSessionView.vue";
 import AboutView from "../views/AboutView.vue";
 import mainPageUtils from "../utils/mainPageUtils";
+import CallbackView from '../views/CallbackView.vue';
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes: [
         {
             path: '/',
@@ -29,13 +29,7 @@ const router = createRouter({
         {
             path: '/logout',
             name: "logout",
-            component: LogoutView,
-            beforeEnter: async (to, from) => {
-                const isAuthenticated = await isUserAuthenticated();
-                if (!isAuthenticated) {
-                    return false
-                }
-            }
+            component: LogoutView
         },
         {
             path: '/register',
@@ -47,23 +41,29 @@ const router = createRouter({
                 // if user exists in db, he isn't allowed to naivgate there
                 return !exists;
             }
-        }
+        },
+        {
+            path: '/callback',
+            name: 'callback',
+            component: CallbackView,
+        },
     ],
 })
 
 router.beforeEach(async (to, from) => {
+    return
     const isRouteLogin = to.name === "about";
-    const isAuthenticated = await isUserAuthenticated();
 
-    mainPageUtils.isLoggedIn.value = isAuthenticated;
+//    mainPageUtils.isLoggedIn.value = isAuthenticated;
     
-    if (!isAuthenticated && !isRouteLogin) {
+    /*if (!isAuthenticated && !isRouteLogin) {
         return "about";
     }
     
     if (!isAuthenticated) {
         return;
     }
+        */
     
     const exists = await existsUserByClaims();
 

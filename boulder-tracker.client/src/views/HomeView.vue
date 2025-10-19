@@ -35,14 +35,15 @@ const isLoading: Ref<boolean> = ref(true);
 
 onMounted(async () => {
   isLoading.value = true;
+
   await getCurrentLoggedInUser().then(value => {
     user.value = value.data;
 
-    mainPageUtils.pageTitle.value = "Hallo " + user.value.userName
+    //mainPageUtils.pageTitle.value = "Hallo " + user.value.userName
   });
 
   await getLatestSessions().then(value => {
-    sessions.value = value.data;
+    //sessions.value = value.data;
   })
   isLoading.value = false;
 })

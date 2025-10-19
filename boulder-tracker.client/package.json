@@ -16,8 +16,8 @@
     "format": "prettier .  --write"
   },
   "dependencies": {
-    "@auth0/auth0-vue": "^2.4.0",
     "@fontsource/roboto": "^5.2.7",
+    "@logto/vue": "^3.0.9",
     "@mdi/font": "^7.4.47",
     "@vueuse/core": "^13.9.0",
     "axios": "^1.12.2",

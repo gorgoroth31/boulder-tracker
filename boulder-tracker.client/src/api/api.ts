@@ -1,6 +1,6 @@
 ﻿import axios from "axios";
-import client, {getAccessToken} from "../plugins/auth";
 import {parse, stringify} from 'qs'
+import { useLogto } from "@logto/vue";
 
 const url = import.meta.env.VITE_SERVER_URL;
 
@@ -15,7 +15,7 @@ let instance = axios.create({
 
 instance.interceptors.request.use(
     async (config) => {
-        const token = await getAccessToken()
+        const token = ""
         config.headers['Authorization'] = `Bearer ${token}`
         return config
     },
@@ -40,6 +40,6 @@ export async function getHealthCheck(): Promise<string> {
 }
 
 export async function existsUserByClaims(): Promise<boolean> {
-    await client.checkSession();
+    //await client.checkSession();
     return await instance.get(url + "/user/exists").then(response => response.data);
 }

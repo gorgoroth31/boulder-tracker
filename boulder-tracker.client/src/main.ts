@@ -7,14 +7,19 @@ import router from './router'
 import 'vuetify/styles'
 
 import '@mdi/font/css/materialdesignicons.css'
-import client from "./plugins/auth";
 import vuetify from "./plugins/vuetify";
+import { createLogto, LogtoConfig } from '@logto/vue'
 
 const app = createApp(App)
 
 app.use(router)
 
-app.use(client);
+const client: LogtoConfig = {
+    endpoint: import.meta.env.VITE_LOGTO_ENDPOINT,
+    appId: import.meta.env.VITE_LOGTO_APPID
+}
+
+app.use(createLogto, client)
 
 app.use(vuetify)
 

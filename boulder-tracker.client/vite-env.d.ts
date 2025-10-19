@@ -7,12 +7,9 @@ interface ViteTypeOptions {
 }
 
 interface ImportMetaEnv {
-    readonly VITE_AUTH_DOMAIN: string
-    readonly VITE_SERVER_URL: string
-    readonly VITE_AUDIENCE: string
-    readonly VITE_AUTH_CLIENT_ID: string
-    readonly VITE_SCOPES: string
-    // more env variables...
+    readonly VITE_LOGTO_APPID: string
+    readonly VITE_LOGTO_ENDPOINT: string
+    readonly VITE_APP_URI: string
 }
 
 interface ImportMeta {

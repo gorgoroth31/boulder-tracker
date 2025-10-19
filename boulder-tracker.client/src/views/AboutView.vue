@@ -42,8 +42,10 @@
 <script setup lang="ts">
 import {onMounted} from "vue";
 import mainPageUtils from "@/utils/mainPageUtils";
-import {loginWithRedirect} from "@/plugins/auth";
 import AboutCarousel from "@/components/about/AboutCarousel.vue";
+import { useLogto } from "@logto/vue";
+
+const { signIn } = useLogto()
 
 // TODO: anstatt dem Text schicke Grafiken basteln, die die App als Showcase wie z.B. im Play Store anzeigen
 const slides1 = [
@@ -60,6 +62,6 @@ onMounted(async () => {
 })
 
 function login() {
-  loginWithRedirect()
+  signIn(import.meta.env.VITE_APP_URI + "/callback")
 }
 </script>

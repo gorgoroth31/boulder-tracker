@@ -15,7 +15,6 @@ import {createUserForClaim} from "@/api/user.api";
 import {User} from "@/models/user";
 import {useRouter} from "vue-router";
 import mainPageUtils from "@/utils/mainPageUtils";
-import {existsUserNameAlready} from "@/api/api";
 
 let username = ref('')
 const router = useRouter()
@@ -40,6 +39,8 @@ async function submit() {
     return;
   }
   
+
+
   let newUser: User = {
     username: username.value
   }
