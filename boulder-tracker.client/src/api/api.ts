@@ -1,6 +1,6 @@
 ﻿import axios from "axios";
 import {parse, stringify} from 'qs'
-import auth, { getToken } from "@/plugins/auth";
+import { useLogto } from "@logto/vue";
 
 const url = import.meta.env.VITE_SERVER_URL;
 
@@ -15,8 +15,7 @@ let instance = axios.create({
 
 instance.interceptors.request.use(
     async (config) => {
-        const token = await auth.
-        console.log(token)
+        const token = ""
         config.headers['Authorization'] = `Bearer ${token}`
         return config
     },
