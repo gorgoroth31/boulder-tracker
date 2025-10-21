@@ -27,6 +27,7 @@ import {getLatestSessions} from "@/api/session.api";
 import {Session} from "node:inspector";
 import SessionCard from "@/components/SessionCard.vue";
 import router from "@/router";
+import { getHealthCheck } from "@/api/api";
 
 const user = ref<User | null>(null);
 const sessions = ref<Session[] | null>(null);
@@ -46,6 +47,10 @@ onMounted(async () => {
     //sessions.value = value.data;
   })
   isLoading.value = false;
+
+  const result = await getHealthCheck()
+
+  console.log(result)
 })
 
 </script>

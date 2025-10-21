@@ -38,7 +38,7 @@ func apiPrivateRouter() *mux.Router {
 
 func setupMiddleware(router *mux.Router) {
 	router.Use(middleware.SetupLogging)
-	router.Use(middleware.EnsureValidToken())
+	router.Use(middleware.AuthMiddleware)
 }
 
 func mount(r *mux.Router, path string, handler http.Handler) {
