@@ -9,6 +9,6 @@ onMounted(() => {
     mainPageUtils.pageTitle.value = "Logout"
 
     const { signOut } = useLogto();
-    signOut(import.meta.env.VITE_APP_URI)
+    signOut(`${import.meta.env.VITE_APP_URI}/about`)
 })
 </script>

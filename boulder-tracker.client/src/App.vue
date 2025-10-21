@@ -16,5 +16,4 @@
 import { RouterView} from 'vue-router'
 import mainPageUtil from "./utils/mainPageUtils";
 import NavMenu from "@/components/layout/NavMenu.vue";
-
 </script>
