@@ -1,25 +1,12 @@
 ﻿package middleware
 
 import (
-	"context"
+	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/utils"
-	//import "github.com/golang-jwt/jwt/v5"
 )
-
-// CustomClaims contains custom data we want from the token.
-type CustomClaims struct {
-	Scope string `json:"scope"`
-}
-
-// Validate does nothing for this example, but we need
-// it to satisfy validator.CustomClaims interface.
-func (c CustomClaims) Validate(ctx context.Context) error {
-	return nil
-}
 
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -30,7 +17,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 		tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
-		claims, err := utils.VerifyToken(tokenString)
+		claims, err := verifyToken(tokenString)
 		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("Error verifying JWT token: " + err.Error()))
@@ -44,4 +31,18 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r)
 	})
+}
+
+func verifyToken(tokenString string) (jwt.Claims, error) {
+	// hier muss ich über die API von logto den public key bekommen
+	// https://bump.sh/logto/doc/logto-management-api/authentication
+	// den Public key muss ich irgendwie benutzen um den Fehler rauszuschmeißen
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodECDSA); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return token, nil
+	})
+
+	return token.Claims, err
 }
