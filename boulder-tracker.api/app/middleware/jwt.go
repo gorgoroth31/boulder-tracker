@@ -3,8 +3,10 @@
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
+	"github.com/MicahParks/keyfunc"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -37,12 +39,24 @@ func verifyToken(tokenString string) (jwt.Claims, error) {
 	// hier muss ich über die API von logto den public key bekommen
 	// https://bump.sh/logto/doc/logto-management-api/authentication
 	// den Public key muss ich irgendwie benutzen um den Fehler rauszuschmeißen
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+
+	jwks, err := keyfunc.Get(os.Getenv("LOGTO_PUBLIC_KEY_LOCATION"), keyfunc.Options{})
+
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	token, err := jwt.Parse(tokenString, jwks.Keyfunc)
+
+	// claims := jwt.MapClaims{}
+
+	/*token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodECDSA); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 		return token, nil
-	})
+	})*/
 
 	return token.Claims, err
 }
