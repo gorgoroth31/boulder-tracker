@@ -7,6 +7,7 @@ import AddSessionView from "../views/AddSessionView.vue";
 import AboutView from "../views/AboutView.vue";
 import mainPageUtils from "../utils/mainPageUtils";
 import CallbackView from '../views/CallbackView.vue';
+import { useAuthStore } from '@/stores/authStore';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -51,19 +52,21 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from) => {
-    return
     const isRouteLogin = to.name === "about";
 
-//    mainPageUtils.isLoggedIn.value = isAuthenticated;
+    return
+
+    const { isAuthenticated } = useAuthStore()
     
-    /*if (!isAuthenticated && !isRouteLogin) {
-        return "about";
+    mainPageUtils.isLoggedIn.value = isAuthenticated();
+    
+    if (!isAuthenticated() && !isRouteLogin) {
+        return "/about";
     }
     
     if (!isAuthenticated) {
         return;
     }
-        */
     
     const exists = await existsUserByClaims();
 

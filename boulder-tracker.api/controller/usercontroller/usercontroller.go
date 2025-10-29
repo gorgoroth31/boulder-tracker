@@ -31,6 +31,8 @@ func AddUserForPrincipal(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println("Principal: " + r.Header.Get("principal"))
+
 	token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
 
 	userDto.Principal = token.RegisteredClaims.Subject
