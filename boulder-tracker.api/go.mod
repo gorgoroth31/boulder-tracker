@@ -12,14 +12,13 @@ require (
 	github.com/MicahParks/keyfunc v1.9.0
 	github.com/auth0/go-jwt-middleware/v2 v2.3.0
 	github.com/gofrs/uuid/v5 v5.3.0
-	github.com/golang-jwt/jwt/v5 v5.3.0
+	github.com/golang-jwt/jwt/v4 v4.4.2
 	github.com/joho/godotenv v1.5.1
 	github.com/rs/cors v1.11.1
 )
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
-	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
 	golang.org/x/crypto v0.35.0 // indirect
 	gopkg.in/go-jose/go-jose.v2 v2.6.3 // indirect
 )

@@ -1,13 +1,13 @@
 ﻿package middleware
 
 import (
-	"fmt"
+	"errors"
 	"net/http"
 	"os"
 	"strings"
 
 	"github.com/MicahParks/keyfunc"
-	"github.com/golang-jwt/jwt/v5"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 func AuthMiddleware(next http.Handler) http.Handler {
@@ -19,44 +19,38 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 		tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
-		claims, err := verifyToken(tokenString)
+
+		_, err := verifyToken(tokenString)
 		if err != nil {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("Error verifying JWT token: " + err.Error()))
 			return
 		}
-		name := claims.(jwt.MapClaims)["name"].(string)
-		role := claims.(jwt.MapClaims)["role"].(string)
-
-		r.Header.Set("name", name)
-		r.Header.Set("role", role)
 
 		next.ServeHTTP(w, r)
 	})
 }
 
 func verifyToken(tokenString string) (jwt.Claims, error) {
-	// hier muss ich über die API von logto den public key bekommen
-	// https://bump.sh/logto/doc/logto-management-api/authentication
-	// den Public key muss ich irgendwie benutzen um den Fehler rauszuschmeißen
-
 	jwks, err := keyfunc.Get(os.Getenv("LOGTO_PUBLIC_KEY_LOCATION"), keyfunc.Options{})
 
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 
 	token, err := jwt.Parse(tokenString, jwks.Keyfunc)
 
-	// claims := jwt.MapClaims{}
+	if err != nil {
+		return nil, err
+	}
 
-	/*token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodECDSA); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-		}
-		return token, nil
-	})*/
+	if !token.Valid {
+		return nil, err
+	}
 
-	return token.Claims, err
+	if claims, ok := token.Claims.(jwt.MapClaims); ok {
+		return claims, nil
+	}
+
+	return nil, errors.New("something went wrong in token verification")
 }
