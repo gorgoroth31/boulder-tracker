@@ -1,4 +1,5 @@
-﻿import { useAuthStore } from "@/stores/authStore";
+﻿import router from "@/router";
+import { useAuthStore } from "@/stores/authStore";
 import axios from "axios";
 import {parse, stringify} from 'qs'
 
@@ -28,6 +29,9 @@ instance.interceptors.request.use(
 instance.interceptors.response.use((response) => {
         return response;
     }, (error) => {
+        if (error.status === 401) {
+            router.push("/logout")
+        }
         return error
     }
 )
