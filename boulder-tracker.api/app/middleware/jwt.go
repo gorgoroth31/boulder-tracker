@@ -32,9 +32,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		// somehow not getting set when calling user/login
-		r.Header.Set("principal", claims.Subject)
-
+		r.Header.Set("principal", claims.Sub)
 		next.ServeHTTP(w, r)
 	})
 }
