@@ -21,7 +21,6 @@ func (user *User) ToUserDto() *UserDto {
 	return &UserDto{
 		Id:        user.Id,
 		UserName:  user.UserName,
-		Principal: user.Principal,
 		IsDeleted: user.IsDeleted,
 	}
 }

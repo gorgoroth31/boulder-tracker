@@ -97,37 +97,6 @@ func ExistsUsername(name string) bool {
 	return count == 1
 }
 
-func Delete(userId uuid.UUID) error {
-	// get db connection
-	database, err := db.CreateDatabase()
-
-	if err != nil {
-		fmt.Println("database connection failed")
-	}
-	defer database.Close()
-
-	stmt, err := database.Prepare("DELETE FROM users WHERE Id = ?;")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer stmt.Close()
-
-	result, err := stmt.Exec(userId)
-
-	if err != nil {
-		return err
-	}
-
-	_, err = result.RowsAffected()
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func GetByPrincipal(principal string) (*models.User, error) {
 	database, err := db.CreateDatabase()
 

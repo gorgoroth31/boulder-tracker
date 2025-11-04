@@ -5,18 +5,15 @@ import (
 	"fmt"
 	"net/http"
 
-	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
-	"github.com/auth0/go-jwt-middleware/v2/validator"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/services/sessionservice"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/services/userservice"
-	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/utils"
 )
 
 func GetCurrentSession(w http.ResponseWriter, r *http.Request) {
-	token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	principal := r.Header.Get("principal")
 
-	user, err := userservice.GetByPrincipal(token.RegisteredClaims.Subject)
+	user, err := userservice.GetByPrincipal(principal)
 
 	if err != nil {
 		w.WriteHeader(500)
@@ -37,9 +34,9 @@ func GetCurrentSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetLatest(w http.ResponseWriter, r *http.Request) {
-	principalId := utils.GetPrincipalId(r)
+	principal := r.Header.Get("principal")
 
-	sessions, err := sessionservice.GetLatestForUser(principalId, 5)
+	sessions, err := sessionservice.GetLatestForUser(principal, 5)
 
 	if err != nil {
 		fmt.Println(err)
@@ -85,9 +82,9 @@ func UpdateSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func SubmitCurrentSession(w http.ResponseWriter, r *http.Request) {
-	principalId := utils.GetPrincipalId(r)
+	principal := r.Header.Get("principal")
 
-	err := sessionservice.SubmitCurrentSessionForUser(principalId)
+	err := sessionservice.SubmitCurrentSessionForUser(principal)
 
 	if err != nil {
 		fmt.Println(err)

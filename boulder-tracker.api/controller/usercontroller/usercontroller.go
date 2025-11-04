@@ -3,16 +3,10 @@ package usercontroller
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
-	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
-	"github.com/auth0/go-jwt-middleware/v2/validator"
-	"github.com/gofrs/uuid/v5"
-	guid "github.com/google/uuid"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/models"
 	"github.com/gorgoroth31/boulder-tracker/boulder-tracker.api/services/userservice"
-	"github.com/gorilla/mux"
 )
 
 func AddUserForPrincipal(w http.ResponseWriter, r *http.Request) {
@@ -31,9 +25,9 @@ func AddUserForPrincipal(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token := r.Header.Get("principal")
+	principal := r.Header.Get("principal")
 
-	userDto.Principal = token
+	userDto.Principal = principal
 
 	err = userservice.AddUser(&userDto)
 
@@ -48,9 +42,9 @@ func AddUserForPrincipal(w http.ResponseWriter, r *http.Request) {
 }
 
 func ExistsUserWithPrincipal(w http.ResponseWriter, r *http.Request) {
-	token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	principal := r.Header.Get("principal")
 
-	exists, err := userservice.ExistsUserWithPrincipal(token.RegisteredClaims.Subject)
+	exists, err := userservice.ExistsUserWithPrincipal(principal)
 
 	if err != nil {
 		fmt.Println(err)
@@ -61,28 +55,10 @@ func ExistsUserWithPrincipal(w http.ResponseWriter, r *http.Request) {
 	encoder.Encode(exists)
 }
 
-func Delete(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, ok := vars["id"]
-
-	if !ok {
-		log.Fatal("No id in the path")
-	}
-
-	err := userservice.Delete(guid.UUID(uuid.FromStringOrNil(id)))
-
-	if err != nil {
-		w.WriteHeader(400)
-		return
-	}
-
-	w.WriteHeader(201)
-}
-
 func GetByPrincipalForLogin(w http.ResponseWriter, r *http.Request) {
-	token := r.Context().Value(jwtmiddleware.ContextKey{}).(*validator.ValidatedClaims)
+	principal := r.Header.Get("principal")
 
-	user, err := userservice.GetByPrincipal(token.RegisteredClaims.Subject)
+	user, err := userservice.GetByPrincipal(principal)
 
 	if err != nil {
 		fmt.Println(err)
