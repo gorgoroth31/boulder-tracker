@@ -24,10 +24,9 @@ import {User} from "@/models/user";
 import {getCurrentLoggedInUser} from "@/api/user.api";
 import mainPageUtils from "./../utils/mainPageUtils";
 import {getLatestSessions} from "@/api/session.api";
-import {Session} from "node:inspector";
 import SessionCard from "@/components/SessionCard.vue";
 import router from "@/router";
-import { getHealthCheck } from "@/api/api";
+import { Session } from "@/models/session";
 
 const user = ref<User | null>(null);
 const sessions = ref<Session[] | null>(null);
@@ -39,18 +38,13 @@ onMounted(async () => {
 
   await getCurrentLoggedInUser().then(value => {
     user.value = value.data;
-
-    //mainPageUtils.pageTitle.value = "Hallo " + user.value.userName
+    mainPageUtils.pageTitle.value = "Hallo " + user.value?.userName
   });
 
   await getLatestSessions().then(value => {
-    //sessions.value = value.data;
+    sessions.value = value.data;
   })
   isLoading.value = false;
-
-  const result = await getHealthCheck()
-
-  console.log(result)
 })
 
 </script>
