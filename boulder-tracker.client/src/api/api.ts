@@ -46,6 +46,5 @@ export async function getHealthCheck(): Promise<string> {
 }
 
 export async function existsUserByClaims(): Promise<boolean> {
-    //await client.checkSession();
     return await instance.get(url + "/user/exists").then(response => response.data);
 }

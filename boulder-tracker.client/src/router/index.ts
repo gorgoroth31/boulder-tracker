@@ -54,8 +54,6 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
     const isRouteLogin = to.name === "about";
 
-    return
-
     const { isAuthenticated } = useAuthStore()
     
     mainPageUtils.isLoggedIn.value = isAuthenticated();
@@ -64,10 +62,10 @@ router.beforeEach(async (to, from) => {
         return "/about";
     }
     
-    if (!isAuthenticated) {
+    if (!isAuthenticated()) {
         return;
     }
-    
+
     const exists = await existsUserByClaims();
 
     if (to.name !== 'register' && !exists) {

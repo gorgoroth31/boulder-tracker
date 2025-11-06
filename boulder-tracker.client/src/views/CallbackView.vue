@@ -7,9 +7,9 @@
 import { useHandleSignInCallback } from '@logto/vue';
 import router from '@/router';
 
-const { isLoading, isAuthenticated,  } = useHandleSignInCallback(() => {
+const { isLoading, isAuthenticated } = useHandleSignInCallback(() => {
   // Do something when finished, e.g. redirect to home page
-  if (isAuthenticated) {
+  if (isAuthenticated.value) {
     router.push("/").then(() => router.go(0))
   } else {
     router.push("/about")
