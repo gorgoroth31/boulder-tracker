@@ -1,5 +1,5 @@
-﻿import router from "@/router";
-import { useAuthStore } from "@/stores/authStore";
+﻿import { useAuthStore } from "@/stores/authStore";
+import { useLogto } from "@logto/vue";
 import axios from "axios";
 import {parse, stringify} from 'qs'
 
@@ -30,7 +30,8 @@ instance.interceptors.response.use((response) => {
         return response;
     }, (error) => {
         if (error.status === 401) {
-            router.push("/logout")
+            const { signIn } = useLogto()
+            signIn(import.meta.env.VITE_APP_URI + "/callback")
         }
         return error
     }

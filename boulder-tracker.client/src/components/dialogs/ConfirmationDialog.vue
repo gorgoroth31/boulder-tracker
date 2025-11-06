@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 
-import {ComponentPublicInstance, Ref, ref} from "vue";
+import {ComponentPublicInstance, CreateComponentPublicInstanceWithMixins, Ref, ref, ShallowRef} from "vue";
 
 defineProps<{
   activator: Element | (string & {}) | 'parent' | ComponentPublicInstance,

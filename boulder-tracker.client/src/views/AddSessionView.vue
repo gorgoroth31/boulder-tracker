@@ -30,9 +30,9 @@
         <AddBoulderRouteCardDialog @submit="handleAddBoulderRouteCallback"></AddBoulderRouteCardDialog>
       </v-row>
       <v-row class="d-flex justify-end">
-        <v-btn ref="submit-btn" :disabled="!isSaved">Session abschließen</v-btn>
+        <v-btn id="session-submit-btn" :disabled="!isSaved">Session abschließen</v-btn>
         
-        <ConfirmationDialog @submit="submit" :title="null" :activator="submitButtonRef" text="Bitte bestätige, dass du die Session abschließen möchtest" ok-button-text="Ok" cancel-button-text="Abbrechen" :close-on-back="true"></ConfirmationDialog>
+        <ConfirmationDialog @submit="submit" title="" activator="#session-submit-btn" text="Bitte bestätige, dass du die Session abschließen möchtest" ok-button-text="Ok" cancel-button-text="Abbrechen" :close-on-back="true"></ConfirmationDialog>
       </v-row>
     </v-container>
   </v-form>
@@ -54,12 +54,10 @@ import { useDebounceFn } from '@vueuse/core'
 import ConfirmationDialog from "@/components/dialogs/ConfirmationDialog.vue";
 import {sleep} from "@/utils/otherUtils";
 
-const submitButtonRef = useTemplateRef("submit-btn")
-
 const isLoading: Ref<boolean> = ref(true);
 const showEndtimeSnackbar: Ref<boolean> = ref(false);
 
-const session: Ref<Session> = ref<Session>({});
+const session: Ref<Session> = ref<Session>({} as Session);
 const sessionDate: Ref<Date> = ref(new Date());
 
 const isSaved: Ref<boolean> = ref(false);

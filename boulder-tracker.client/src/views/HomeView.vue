@@ -20,15 +20,11 @@
 
 <script setup lang="ts">
 import {onMounted, Ref, ref} from "vue";
-import {User} from "@/models/user";
-import {getCurrentLoggedInUser} from "@/api/user.api";
-import mainPageUtils from "./../utils/mainPageUtils";
 import {getLatestSessions} from "@/api/session.api";
 import SessionCard from "@/components/SessionCard.vue";
 import router from "@/router";
 import { Session } from "@/models/session";
 
-const user = ref<User | null>(null);
 const sessions = ref<Session[] | null>(null);
 
 const isLoading: Ref<boolean> = ref(true);
@@ -36,15 +32,10 @@ const isLoading: Ref<boolean> = ref(true);
 onMounted(async () => {
   isLoading.value = true;
 
-  await getCurrentLoggedInUser().then(value => {
-    user.value = value.data;
-    mainPageUtils.pageTitle.value = "Hallo " + user.value?.userName
-  });
-
   await getLatestSessions().then(value => {
     sessions.value = value.data;
+    isLoading.value = false;
   })
-  isLoading.value = false;
 })
 
 </script>
